@@ -2,18 +2,6 @@ import React from 'react';
 
 class Step2 extends React.Component {
   
-  // NOTE: Send current step's data back to root
-  handleStepSaveClick = (event) => {
-    event.preventDefault();
-    this.props.submitStepDataUpdate(2,{data: "my data here"});
-  }
-
-  // NOTE: handle clicking the Previous button (step back a screen)
-  stepPrevious = (event) => {
-    event.preventDefault();
-    this.props.handlePreviousButtonClick(2);
-  }
-
   render() {
     return( 
       <section>
@@ -54,12 +42,12 @@ class Step2 extends React.Component {
             <hr />
             <div className="grid-container">
               <div className="grid-x grid-padding-x">
+              <div className="medium-3 cell medium-offset-1">
+                <button className="button" onClick={() => {this.props.handlePreviousButtonClick(2)}}>Previous Screen</button>
+                </div>
                 <div className="medium-3 cell medium-offset-3">
-                  <button className="button" onClick={this.handleStepSaveClick}>Save and Continue</button>
-                </div>
-                <div className="medium-3 cell medium-offset-1">
-                <button className="button" onClick={this.stepPrevious}>Previous Screen</button>
-                </div>
+                  <button className="button" onClick={() => { this.props.submitStepDataUpdate(2, {stepData: "my data here."})}}>Save and Continue</button>
+                </div> 
               </div>
             </div>
           </form>

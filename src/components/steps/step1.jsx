@@ -2,17 +2,24 @@ import React from 'react';
 
 class Step1 extends React.Component {
   
-  // NOTE: Send current step's data back to root
-  handleStepSaveClick = (event) => {
+  submitStepHandler = (event) => {
+    console.log("submitStepHandler");
     event.preventDefault();
-    this.props.submitStepDataUpdate(1,{data: "my data here"});
+    // NOTE: this will get the data off the form submitted
+    const formData = new FormData(event.target);
+    console.log(formData);
+    let stepNumber = formData.get("stepNumber");
+    let stepData = {
+      age: formData.get("age"),
+      living: formData.get("living"),
+      state: formData.get("state"),
+      studentStatus: formData.get("hsOrTransfer"),
+      currentGPA: formData.get("currentGPA")
+    };
+    console.log(`${stepNumber}`);
+    console.log(stepData);
+    this.props.saveStepData(stepNumber, stepData);
   }
-
-  // NOTE: handle clicking the Previous button (step back a screen)
-  /*stepPrevious = (event) => {
-    event.preventDefault();
-    this.props.handlePreviousButtonClick(1);
-  }*/
 
   render() {
     return( 
@@ -28,12 +35,13 @@ class Step1 extends React.Component {
         </div>
         <div className="row">
           <div className="medium-12 columns">
-            <form>
+            <form onSubmit={this.submitStepHandler}>
+              <input type="hidden" id="stepNumber" name="stepNumber" value="1" />
               <div className="grid-container">
                 <div className="grid-x grid-padding-x">
                   <div className="medium-2 cell">
                     <label><strong>How old are you?</strong>
-                      <input name="age" type="number" min="15" step="1" />
+                      <input id="studentAge" name="age" type="number" min="15" step="1" defaultValue="15" ref={this.input} />
                     </label>
                   </div>
                   <div className="medium-6 cell medium-offset-1">
@@ -41,16 +49,16 @@ class Step1 extends React.Component {
                       <strong>Living Arrangement</strong><br />
                       <p>Where do you plan to live while attending this institution?</p>
                       <fieldset>
-                        <input type="radio" name="living" value="onCampus" id="onCampus"/><label htmlFor="onCampus">On-campus (in a residence hall, dormitory, or on-campus apartment)</label><br />
-                        <input type="radio" name="living" value="parentsOrFamily" id="parentsOrFamily" /><label htmlFor="parentsOrFamily">Living with my parents or other family members</label><br />
-                        <input type="radio" name="living" value="aloneOrRoommate" id="aloneOrRoommate" /><label htmlFor="aloneOrRoommate">Living on my own or with a roommate</label>
+                        <input type="radio" name="living" value="onCampus" id="onCampus" ref={this.input} defaultChecked /><label htmlFor="onCampus">On-campus (in a residence hall, dormitory, or on-campus apartment)</label><br />
+                        <input type="radio" name="living" value="parentsOrFamily" id="parentsOrFamily" ref={this.input} /><label htmlFor="parentsOrFamily">Living with my parents or other family members</label><br />
+                        <input type="radio" name="living" value="aloneOrRoommate" id="aloneOrRoommate" ref={this.input} /><label htmlFor="aloneOrRoommate">Living on my own or with a roommate</label>
                       </fieldset>
                     </label>
                   </div>
                   <div className="medium-3 cell">
                     <label>
                       <strong>What is your state of residency?</strong><br />
-                      <select>
+                      <select name="state">
                         <option value="New Jersey">New Jersey</option>
                         <option value="New York">New York</option>
                         <option value="Pennsylvania">Pennsylvania</option>
@@ -67,8 +75,9 @@ class Step1 extends React.Component {
                       <strong>Are you a High School or Transfer Student?</strong><br />
                       <p>Are you applying as a current High School Student or transferring from a different college?</p>
                       <fieldset>
-                        <input type="radio" name="hsOrTransfer" value="highschool" id="highschool"/><label htmlFor="highschool">Current High School Student</label><br />
-                        <input type="radio" name="hsOrTransfer" value="transfer" id="transfer" /><label htmlFor="transfer">Transfer Student</label>
+                      <label htmlFor="highschool"><input type="radio" name="hsOrTransfer" value="highschool" id="highschool" ref={this.input} defaultChecked/>Current High School Student</label>
+                      <br />
+                      <label htmlFor="transfer"><input type="radio" name="hsOrTransfer" value="transfer" id="transfer" ref={this.input} />Transfer Student</label>
                       </fieldset>
                     </label>
                   </div>
@@ -76,7 +85,7 @@ class Step1 extends React.Component {
                     <label>
                       <strong>Current GPA</strong>
                       <p>What is your current GPA?</p>
-                      <input name="currentGPA" type="number" step="0.01" min="0.0" />
+                      <input name="currentGPA" type="number" step="0.01" min="0.0" defaultValue="0.00" />
                     </label>
                   </div>
                 </div>
@@ -109,7 +118,7 @@ class Step1 extends React.Component {
               <div className="grid-container">
                 <div className="grid-x grid-padding-x">
                   <div className="medium-3 cell medium-offset-5">
-                    <button className="button" onClick={this.handleStepSaveClick}>Save and Continue</button>
+                    <input type="submit" className="button" value="Submit and Continue" />
                   </div>
                   {/* NOTE: since this is the first screen, we can't go back further, no Previous button here. */}
                 </div>

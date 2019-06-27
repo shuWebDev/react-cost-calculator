@@ -9,10 +9,40 @@ class App extends React.Component {
     this.state = {
       disclaimerAccepted: false,
       currentStep: 0,
-      stepData: {
-        step1: {}
-      }
+      stepData: {},
+      efc: {},
+      poa: {},
+      pell: [],
+      tag: [],
+      // NOTE: userInputData: object to capture all the user input for the calculations
+      userInputData: {}
     };
+  }
+
+  componentWillMount() {
+    this.fetchAllData();
+  }
+
+  fetchAllData = () => {
+    try {
+      Promise.all([
+        fetch("/efc.json").then(response => response.json()),
+        fetch("/poa.json").then(response => response.json()),
+        fetch("/pell.json").then(response => response.json()),
+        fetch("/tag.json").then(response => response.json()),
+        fetch("/merit.json").then(response => response.json())
+      ]).then(([efc, poa, pell, tag, merit]) => {
+        this.setState({
+          efc: efc,
+          poa: poa,
+          pell: pell,
+          tag: tag,
+          merit: merit
+        }, () => {console.log("data loaded");});
+      });  
+    } catch(e) {
+      console.log(e);
+    }
   }
 
   handleDisclaimerClick = (event) => {
@@ -23,34 +53,12 @@ class App extends React.Component {
     });
   }
 
-  // NOTE: handles submissions of updated data
-  // from the individual Step components
-  // stepNumber: currently active step, increment on
-  // save to state to trigger rendering the next step
-  // value: the data saved for the step
-  submitStepDataUpdate = (stepNumber, value) => {
-    this.setState(prevState => ({
-      currentStep: this.state.currentStep + 1,
-      stepData: {
-        ...prevState.stepData,
-        [`step${stepNumber}`]: value
+  saveStepData = (stepNumber, data) => {
+    this.setState({
+      userInputData: {
+        [`step${stepNumber}`]: data
       }
-    }), () => { console.log(`step ${stepNumber} data updated.`); });
-  }
-
-  // NOTE: handle clicking the Previous button on a
-  // Step, fromStepNumber is the step screen in the  
-  // process the click came from. 
-  // If we are coming from Step 1, we can't go back
-  // further, stay there.
-  handlePreviousButtonClick = (fromStepNumber) => {
-    if(fromStepNumber > 1) {
-      this.setState({
-        currentStep: fromStepNumber--
-      }, () => { console.log(`Going back to Step ${fromStepNumber - 1}`)});
-    } else {
-      console.log("Previous screen navigation canceled, we are at the first screen.");
-    }
+    }, () => { console.log(`step ${stepNumber} data saved.`)});
   }
 
   componentDidUpdate() {
@@ -66,7 +74,7 @@ class App extends React.Component {
       )
     } else {
       // User has clicked "accept", move control to the rest of app
-      return <AppCore currentStep={this.state.currentStep} submitStepDataUpdate={this.submitStepDataUpdate} handlePreviousButtonClick={this.handlePreviousButtonClick} />
+      return <AppCore saveStepData={this.saveStepData} currentStep={this.state.currentStep} handlePreviousButtonClick={this.handlePreviousButtonClick} changeHandler={this.changeHandler} />
     }
   }
 }
