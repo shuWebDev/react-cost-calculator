@@ -9,9 +9,9 @@ class Step3 extends React.Component {
     console.log(formData);
     let stepNumber = formData.get("stepNumber");
     let stepData = {
-      familyMembers: formData.get("familyMembers"),
-      familyInCollege: formData.get("familyInCollege"),
-      householdIncome: formData.get("householdIncome")
+      familyMembers: Number(formData.get("familyMembers")),
+      familyInCollege: Number(formData.get("familyInCollege")),
+      householdIncome: Number(formData.get("householdIncome"))
     };
     
     console.log(`${stepNumber}`);

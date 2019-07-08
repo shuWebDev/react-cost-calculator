@@ -7,7 +7,6 @@ class Step1 extends React.Component {
     event.preventDefault();
     // NOTE: this will get the data off the form submitted
     const formData = new FormData(event.target);
-    console.log(formData);
     let scores, stepNumber = formData.get("stepNumber");
 
     // NOTE: validate the Test Scores section
@@ -29,13 +28,13 @@ class Step1 extends React.Component {
       };
       document.querySelector(".form-validation-message").innerHTML = "";
     }
-
+    
     let stepData = {
-      age: parseInt(formData.get("age")),
+      age: Number(formData.get("age")),
       living: formData.get("living"),
       state: formData.get("state"),
       studentStatus: formData.get("hsOrTransfer"),
-      currentGPA: parseFloat(formData.get("currentGPA").toFixed(2)),
+      currentGPA: Number(parseFloat(formData.get("currentGPA")).toFixed(2)),
       scores: scores
     };
     console.log(`${stepNumber}`);
