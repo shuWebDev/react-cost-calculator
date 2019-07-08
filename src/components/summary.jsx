@@ -12,7 +12,7 @@ class Summary extends React.Component {
             </p>
           </div>
           <ul>
-            <li>Financial Aid: </li>
+            <li>Financial Aid: {this.props.stepData}</li>
             <li>Age: </li>
             <li>Living Arrangement: </li>
             <li>State of residency: </li>

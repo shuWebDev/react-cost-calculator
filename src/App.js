@@ -53,12 +53,14 @@ class App extends React.Component {
     });
   }
 
-  saveStepData = (stepNumber, data) => {
+  saveStepData = (data) => {
     this.setState({
+      currentStep: this.state.currentStep + 1,
       userInputData: {
-        [`step${stepNumber}`]: data
+        ...this.state.userInputData,
+        ...data
       }
-    }, () => { console.log(`step ${stepNumber} data saved.`)});
+    }, () => { console.log(`step data saved.`)});
   }
 
   componentDidUpdate() {
@@ -74,7 +76,7 @@ class App extends React.Component {
       )
     } else {
       // User has clicked "accept", move control to the rest of app
-      return <AppCore saveStepData={this.saveStepData} currentStep={this.state.currentStep} handlePreviousButtonClick={this.handlePreviousButtonClick} changeHandler={this.changeHandler} />
+      return <AppCore saveStepData={this.saveStepData} currentStep={this.state.currentStep} handlePreviousButtonClick={this.handlePreviousButtonClick} changeHandler={this.changeHandler} userInputData={this.state.userInputData} />
     }
   }
 }

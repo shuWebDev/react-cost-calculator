@@ -10,11 +10,11 @@ class AppCore extends React.Component {
     switch(this.props.currentStep) {
       case 1: return <Step1 saveStepData={this.props.saveStepData} />; 
 
-      case 2: return <Step2 />; 
+      case 2: return <Step2 saveStepData={this.props.saveStepData} />; 
 
-      case 3: return <Step3 />;
+      case 3: return <Step3 saveStepData={this.props.saveStepData} />;
 
-      case 4: return <Summary />;
+      case 4: return <Summary userInputData={this.props.userInputData} />;
 
       default: return null; 
     } 

@@ -1,7 +1,23 @@
 import React from 'react';
 
 class Step2 extends React.Component {
-  
+  submitStepHandler = (event) => {
+    console.log("submitStepHandler");
+    event.preventDefault();
+    // NOTE: this will get the data off the form submitted
+    const formData = new FormData(event.target);
+    console.log(formData);
+    let stepNumber = formData.get("stepNumber");
+    let stepData = {
+      marital: formData.get("marital"),
+      childSupport: formData.get("primaryChildSupport")
+    };
+    
+    console.log(`${stepNumber}`);
+    console.log(stepData);
+    this.props.saveStepData(stepData);
+  }
+
   render() {
     return( 
       <section>
@@ -11,7 +27,8 @@ class Step2 extends React.Component {
             <p>Please provide the following information</p>
           </div>
           <hr />
-          <form>
+          <form onSubmit={this.submitStepHandler}>
+            <input type="hidden" id="stepNumber" name="stepNumber" value="2" />
             <div className="grid-container">
               <div className="grid-x grid-padding-x">
                 <div className="medium-6 cell">
@@ -22,8 +39,8 @@ class Step2 extends React.Component {
                       (Answer "yes" if separated but not divorced.)
                     </p>
                     <fieldset>
-                      <input type="radio" name="marital" value="yes" id="maritalYes"/><label htmlFor="maritalYes">Yes</label><br />
-                      <input type="radio" name="marital" value="no" id="maritalNo"/><label htmlFor="maritalNo">No</label>
+                      <input type="radio" name="marital" value="yes" id="maritalYes" ref={this.input} defaultChecked /><label htmlFor="maritalYes">Yes</label><br />
+                      <input type="radio" name="marital" value="no" id="maritalNo" ref={this.input} /><label htmlFor="maritalNo">No</label>
                     </fieldset>
                   </label>
                 </div>
@@ -32,8 +49,8 @@ class Step2 extends React.Component {
                     <strong>Children</strong>
                     <p>Are you (the student) the primary source of financial support for any children?</p>
                     <fieldset>
-                      <input type="radio" name="primaryChildSupport" value="yes" id="primaryChildSupportYes"/><label htmlFor="primaryChildSupportYes">Yes</label><br />
-                      <input type="radio" name="primaryChildSupport" value="no" id="primaryChildSupportNo"/><label htmlFor="primaryChildSupportNo">No</label>
+                      <input type="radio" name="primaryChildSupport" value="yes" id="primaryChildSupportYes" ref={this.input} defaultChecked /><label htmlFor="primaryChildSupportYes">Yes</label><br />
+                      <input type="radio" name="primaryChildSupport" value="no" id="primaryChildSupportNo" ref={this.input} /><label htmlFor="primaryChildSupportNo">No</label>
                     </fieldset>
                   </label>
                 </div>
@@ -46,7 +63,7 @@ class Step2 extends React.Component {
                 <button className="button" onClick={() => {this.props.handlePreviousButtonClick(2)}}>Previous Screen</button>
                 </div>
                 <div className="medium-3 cell medium-offset-3">
-                  <button className="button" onClick={() => { this.props.submitStepDataUpdate(2, {stepData: "my data here."})}}>Save and Continue</button>
+                  <input type="submit" className="button" value="Save and Continue" />
                 </div> 
               </div>
             </div>

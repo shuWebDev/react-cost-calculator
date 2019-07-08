@@ -8,17 +8,39 @@ class Step1 extends React.Component {
     // NOTE: this will get the data off the form submitted
     const formData = new FormData(event.target);
     console.log(formData);
-    let stepNumber = formData.get("stepNumber");
+    let scores, stepNumber = formData.get("stepNumber");
+
+    // NOTE: validate the Test Scores section
+    // BOTH SAT scores OR the ACT Composite score
+    if(!formData.get("actcomposite")) {
+      if(formData.get("erwsat") && formData.get("mathsat")) {
+        scores = {
+          erwsat: parseInt(formData.get("erwsat")),
+          mathsat: parseInt(formData.get("mathsat"))
+        };
+        document.querySelector(".form-validation-message").innerHTML = "";
+      } else {
+        document.querySelector(".form-validation-message").innerHTML = `<div class="callout alert"><p>Please enter a value for either ERW SAT AND Math SAT (both scores if SAT) OR Your Composite ACT score, whichever applies to you.</p></div>`;
+        return; // exit the function, we can't save the data without a completed field
+      } 
+    } else {
+      scores = {
+        act: parseInt(formData.get("actcomposite"))
+      };
+      document.querySelector(".form-validation-message").innerHTML = "";
+    }
+
     let stepData = {
-      age: formData.get("age"),
+      age: parseInt(formData.get("age")),
       living: formData.get("living"),
       state: formData.get("state"),
       studentStatus: formData.get("hsOrTransfer"),
-      currentGPA: formData.get("currentGPA")
+      currentGPA: parseFloat(formData.get("currentGPA").toFixed(2)),
+      scores: scores
     };
     console.log(`${stepNumber}`);
     console.log(stepData);
-    this.props.saveStepData(stepNumber, stepData);
+    this.props.saveStepData(stepData);
   }
 
   render() {
@@ -41,7 +63,7 @@ class Step1 extends React.Component {
                 <div className="grid-x grid-padding-x">
                   <div className="medium-2 cell">
                     <label><strong>How old are you?</strong>
-                      <input id="studentAge" name="age" type="number" min="15" step="1" defaultValue="15" ref={this.input} />
+                      <input id="studentAge" name="age" type="number" min="15" step="1" defaultValue="17" ref={this.input} />
                     </label>
                   </div>
                   <div className="medium-6 cell medium-offset-1">
@@ -84,8 +106,8 @@ class Step1 extends React.Component {
                   <div className="medium-2 cell medium-offset-3">
                     <label>
                       <strong>Current GPA</strong>
-                      <p>What is your current GPA?</p>
-                      <input name="currentGPA" type="number" step="0.01" min="0.0" defaultValue="0.00" />
+                      <p>What is your current GPA?<br />(unweighted, on a 4.0 scale)</p>
+                      <input name="currentGPA" type="number" step="0.01" min="0.00" max="4.00" defaultValue="0.00" onChange={() => {this.value = parseFloat(this.value).toFixed(2)}} />
                     </label>
                   </div>
                 </div>
@@ -111,6 +133,13 @@ class Step1 extends React.Component {
                         <input type="text" name="actcomposite" />
                       </label>
                     </div>
+                  </div>
+                </div>
+              </div>
+              <div className="grid-container">
+                <div className="grid-x grid-padding-x">
+                  <div className="medium-12 cell form-validation-message">
+                    {/* Any form validation messages will output here */}
                   </div>
                 </div>
               </div>
