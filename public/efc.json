@@ -1,105 +1,152 @@
 {
-  "efcdependent": [
+  "efcDependent": [
     [
       {
+        "numberInCollege": 1,
         "numberInFamily": 2,
         "incomeRanges": [0, 1354, 3191, 5258, 7745, 10897, 14241, 17602, 31014]
       },
       {
+        "numberInCollege": 1,
         "numberInFamily": 3,
         "incomeRanges": [0, 755, 2683, 4711, 7029, 10102, 13590, 17153, 34368]
       },
       {
+        "numberInCollege": 1,
         "numberInFamily": 4,
         "incomeRanges": [0, 1354, 3191, 5258, 7745, 10897, 14241, 17602, 31014]
       },
       {
+        "numberInCollege": 1,
         "numberInFamily": 5,
         "incomeRanges": [0, 0, 747, 2737, 4698, 6980.5, 10006, 13599, 31440]
       },
       {
+        "numberInCollege": 1,
         "numberInFamily": 6,
         "incomeRanges": [0, 0, 0, 1182, 3128, 5279, 7716, 10987, 27352]
       }
     ],
     [
       {
+        "numberInCollege": 2,
         "numberInFamily": 2,
         "incomeRanges": [2, 977, 1832.5, 2924, 4071, 5519, 7614, 10223.5, 19249]
       },
       {
+        "numberInCollege": 2,
         "numberInFamily": 3,
         "incomeRanges": [0, 654, 1654, 2745, 4171, 5876.5, 7512.5, 9173.5, 16603]
       },
       {
+        "numberInCollege": 2,
         "numberInFamily": 4,
         "incomeRanges": [0, 278, 1321, 2376, 3600, 5282, 6912, 8684, 19119]
       },
       {
+        "numberInCollege": 2,
         "numberInFamily": 5,
         "incomeRanges": [0, 0, 791, 1830, 2915, 4314, 6028, 7748, 18273]
       },
       {
+        "numberInCollege": 2,
         "numberInFamily": 6,
         "incomeRanges": [0, 0, 20, 1019, 2033, 3204.5, 4791, 6535, 16054.5]
       }
     ],
     [
       {
+        "numberInCollege": 3,
         "numberInFamily": 3,
         "incomeRanges": [0, 1013, 1377.5, 2130, 2891, 3879, 4223.5, 8114, 9955]
       },
       {
+        "numberInCollege": 3,
         "numberInFamily": 4,
         "incomeRanges": [0, 285, 998, 1743, 2659.5, 3831, 5038.5, 6065, 11056]
       },
       {
+        "numberInCollege": 3,
         "numberInFamily": 5,
         "incomeRanges": [0, 94, 779, 1480, 2305, 3389, 4628.5, 5824, 13283]
+      },
+      {
+        "numberInCollege": 3,
+        "numberInFamily": 6,
+        "incomeRanges": [0, 0, 132.5, 870, 1560, 2404, 3469, 4734, 11340]
       }
     ]  
+  ],
+  "efcNotDependentAndNoDependent": [
+    [
+      {
+        "numberInCollege": 1,
+        "numberInFamily": 1,
+        "incomeRanges": [0, 9235, 13116, 16905, 20584, 24187, 27969, 31834, 48593]
+      },
+      {
+        "numberInCollege": 1,
+        "numberInFamily": 2,
+        "incomeRanges": [0, 6262, 9921, 13763, 17478, 21276, 25098.5, 28871, 42201]
+      },
+      {
+        "numberInCollege": 2,
+        "numberInFamily": 2,
+        "incomeRanges": [538, 4544, 6399, 8327, 10193, 12090, 14007.5, 15878, 21580]
+      }
+    ]
   ],
   "efcNotDependentButHasDependent": [
     [
       {
+        "numberInCollege": 1,
         "numberInFamily": 2,
         "incomeRanges": [0, 64, 1793.5, 3470, 5524, 8058, 11186, 14416, 25428]
       },
       {
+        "numberInCollege": 1,
         "numberInFamily": 3,
         "incomeRanges": [0, 0, 977, 2688, 4492, 6820, 9992, 13527, 23124]
       },
       {
+        "numberInCollege": 1,
         "numberInFamily": 4,
         "incomeRanges": [0, 0, 0, 1515, 3177, 5153, 7654, 11080, 20790]
       },
       {
+        "numberInCollege": 1,
         "numberInFamily": 5,
         "incomeRanges": [0, 0, 0, 192, 1945, 3661, 5779, 8528, 18183.5]
       },
       {
+        "numberInCollege": 1,
         "numberInFamily": 6,
         "incomeRanges": [0, 0, 0, 0, 68, 1862.5, 3584, 5746, 14401]
       }
     ],
     [
       {
+        "numberInCollege": 2,
         "numberInFamily": 2,
         "incomeRanges": [0, 508, 1352, 2251, 3440, 4997, 6603, 8053, 12993]
       },
       {
+        "numberInCollege": 2,
         "numberInFamily": 3,
         "incomeRanges": [0, 97, 972, 1812, 2839, 4218, 5961.5, 7709, 12612]
       },
       {
+        "numberInCollege": 2,
         "numberInFamily": 4,
         "incomeRanges": [0, 0, 347, 1190, 2027, 3099, 4576, 6232, 10708]
       },
       {
+        "numberInCollege": 2,
         "numberInFamily": 5,
         "incomeRanges": [0, 0, 0, 587, 1363, 2241, 3394, 4913, 9283]
       },
       {
+        "numberInCollege": 2,
         "numberInFamily": 6,
         "incomeRanges": [0, 0, 0, 0, 500, 1237, 2063.5, 3110, 7219]
       }

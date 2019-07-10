@@ -3,7 +3,7 @@ import React from 'react';
 class Step1 extends React.Component {
   
   submitStepHandler = (event) => {
-    console.log("submitStepHandler");
+    //console.log("submitStepHandler");
     event.preventDefault();
     // NOTE: this will get the data off the form submitted
     const formData = new FormData(event.target);
@@ -37,8 +37,8 @@ class Step1 extends React.Component {
       currentGPA: Number(parseFloat(formData.get("currentGPA")).toFixed(2)),
       scores: scores
     };
-    console.log(`${stepNumber}`);
-    console.log(stepData);
+    //console.log(`${stepNumber}`);
+    //console.log(stepData);
     this.props.saveStepData(stepData);
   }
 

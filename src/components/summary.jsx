@@ -36,9 +36,9 @@ class Summary extends React.Component {
   resolveInCollege = (numInCollege) => {
     let output = "";
     switch(numInCollege) {
-      case 0: output = "One";
-      case 1: output = "Two";
-      case 2: output = "Three or more";
+      case 0: output = "One"; break;
+      case 1: output = "Two"; break;
+      case 2: output = "Three or more"; break;
       default: output = "One";
     }
      return output;
@@ -55,6 +55,7 @@ class Summary extends React.Component {
             </p>
           </div>
           <ul>
+            <li>EFC: {this.props.getEFC()}</li>
             <li>Financial Aid: </li>
             <li>Age: {this.props.userInputData.age}</li>
             <li>Living Arrangement: {this.props.userInputData.living}</li>
@@ -66,9 +67,9 @@ class Summary extends React.Component {
             <li>Transfer Status: {this.props.userInputData.studentStatus}</li>
             <li>Martial Status: {this.props.userInputData.marital}</li>
             <li>Supporting Children: {this.props.userInputData.childSupport}</li>
-            <li>Number in family: {this.resolveFamilyMembers(this.props.userInputData.familyMembers)}</li>
-            <li>Number in college: {this.resolveInCollege(this.props.userInputData.familyInCollege)}</li>
-            <li>Household income: {this.resolveIncome(this.props.userInputData.householdIncome)}</li>
+            <li>Number in family: {/*this.resolveFamilyMembers(this.props.userInputData.familyMembers)*/}</li>
+            <li>Number in college: {/*this.resolveInCollege(this.props.userInputData.familyInCollege)*/}</li>
+            <li>Household income: {/*this.resolveIncome(this.props.userInputData.householdIncome)*/}</li>
           </ul>
         </div>
       </section>

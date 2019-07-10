@@ -14,7 +14,7 @@ class AppCore extends React.Component {
 
       case 3: return <Step3 saveStepData={this.props.saveStepData} />;
 
-      case 4: return <Summary userInputData={this.props.userInputData} />;
+      case 4: return <Summary getEFC={this.props.getEFC} userInputData={this.props.userInputData} />;
 
       default: return null; 
     } 

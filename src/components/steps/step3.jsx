@@ -7,15 +7,15 @@ class Step3 extends React.Component {
     // NOTE: this will get the data off the form submitted
     const formData = new FormData(event.target);
     console.log(formData);
-    let stepNumber = formData.get("stepNumber");
+    //let stepNumber = formData.get("stepNumber");
     let stepData = {
       familyMembers: Number(formData.get("familyMembers")),
       familyInCollege: Number(formData.get("familyInCollege")),
       householdIncome: Number(formData.get("householdIncome"))
     };
     
-    console.log(`${stepNumber}`);
-    console.log(stepData);
+    //console.log(`${stepNumber}`);
+    //console.log(stepData);
     this.props.saveStepData(stepData);
   }
 
@@ -37,11 +37,11 @@ class Step3 extends React.Component {
                     <strong>Number in family</strong>
                     <p>How many people are in your family&apos;s household? (Count yourself, your parent(s), and your parent(s)' other children who are under the age of 24)</p>
                     <fieldset name="familyMembers">
-                      <input type="radio" name="familyMembers" value="0" id="familyMembersTwo" ref={this.input} defaultChecked /><label htmlFor="familyMembersTwo">Two</label><br />
-                      <input type="radio" name="familyMembers" value="1" id="familyMembersThree" ref={this.input} /><label htmlFor="familyMembersThree">Three</label><br />
-                      <input type="radio" name="familyMembers" value="2" id="familyMembersFour" ref={this.input} /><label htmlFor="familyMembersFour">Four</label><br />
-                      <input type="radio" name="familyMembers" value="3" id="familyMembersFive" ref={this.input} /><label htmlFor="familyMembersFive">Five</label><br />
-                      <input type="radio" name="familyMembers" value="4" id="familyMembersSixOrMore" ref={this.input} /><label htmlFor="familyMembersSixOrMore">Six Or More</label><br />
+                      <input type="radio" name="familyMembers" value="2" id="familyMembersTwo" ref={this.input} defaultChecked /><label htmlFor="familyMembersTwo">Two</label><br />
+                      <input type="radio" name="familyMembers" value="3" id="familyMembersThree" ref={this.input} /><label htmlFor="familyMembersThree">Three</label><br />
+                      <input type="radio" name="familyMembers" value="4" id="familyMembersFour" ref={this.input} /><label htmlFor="familyMembersFour">Four</label><br />
+                      <input type="radio" name="familyMembers" value="5" id="familyMembersFive" ref={this.input} /><label htmlFor="familyMembersFive">Five</label><br />
+                      <input type="radio" name="familyMembers" value="6" id="familyMembersSixOrMore" ref={this.input} /><label htmlFor="familyMembersSixOrMore">Six Or More</label><br />
                     </fieldset>
                   </label>
                 </div>
@@ -53,9 +53,9 @@ class Step3 extends React.Component {
                       (Count yourself and your siblings, but do not count your parents)
                     </p>
                     <fieldset name="familyInCollege">
-                      <input type="radio" name="familyInCollege" value="0" id="familyInCollegeOne" ref={this.input} defaultChecked /><label htmlFor="familyInCollegeOne">One child</label><br />
-                      <input type="radio" name="familyInCollege" value="1" id="familyInCollegeTwo" ref={this.input} /><label htmlFor="familyInCollegeTwo">Two children</label><br />
-                      <input type="radio" name="familyInCollege" value="threeplus" id="familyInCollegeThreePlus" ref={this.input} /><label htmlFor="familyInCollegeThreePlus">Three or more children</label><br />
+                      <input type="radio" name="familyInCollege" value="1" id="familyInCollegeOne" ref={this.input} defaultChecked /><label htmlFor="familyInCollegeOne">One child</label><br />
+                      <input type="radio" name="familyInCollege" value="2" id="familyInCollegeTwo" ref={this.input} /><label htmlFor="familyInCollegeTwo">Two children</label><br />
+                      <input type="radio" name="familyInCollege" value="3" id="familyInCollegeThreePlus" ref={this.input} /><label htmlFor="familyInCollegeThreePlus">Three or more children</label><br />
                     </fieldset>
                   </label>
                 </div>
