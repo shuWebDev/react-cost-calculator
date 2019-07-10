@@ -55,7 +55,7 @@ class Summary extends React.Component {
             </p>
           </div>
           <ul>
-            <li>EFC: {this.props.getEFC()}</li>
+            <li>EFC: ${this.props.getEFC().toFixed(2)}</li>
             <li>Financial Aid: </li>
             <li>Age: {this.props.userInputData.age}</li>
             <li>Living Arrangement: {this.props.userInputData.living}</li>

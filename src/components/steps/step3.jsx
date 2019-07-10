@@ -2,11 +2,11 @@ import React from 'react';
 
 class Step3 extends React.Component {
   submitStepHandler = (event) => {
-    console.log("submitStepHandler");
+    //console.log("submitStepHandler");
     event.preventDefault();
     // NOTE: this will get the data off the form submitted
     const formData = new FormData(event.target);
-    console.log(formData);
+    //console.log(formData);
     //let stepNumber = formData.get("stepNumber");
     let stepData = {
       familyMembers: Number(formData.get("familyMembers")),
