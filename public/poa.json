@@ -1,7 +1,7 @@
 {
-  "poa-total-admission-cost": [50994, 38372, 38372],
-  "poa-tuition-fees": [38372, 38372, 38372],
-  "poa-books-supplies": [0, 0, 0],
-  "poa-room-board": [12622, 0, 0],
-  "poa-other-expenses": [0, 0, 0]
+  "poatotaladmissioncost": [50994, 38372, 38372],
+  "poatuitionfees": [38372, 38372, 38372],
+  "poabookssupplies": [0, 0, 0],
+  "poaroomboard": [12622, 0, 0],
+  "poaotherexpenses": [0, 0, 0]
 }

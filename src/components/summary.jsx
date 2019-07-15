@@ -1,7 +1,20 @@
 import React from 'react';
 
+
 class Summary extends React.Component {
-  
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+  }
+  componentWillMount() {
+    // NOTE: compute the EFC amount
+    this.setState({
+      ...this.state,
+      report: this.props.generateReport()
+    });
+  }
+
   resolveIncome = (incomeLevel) => {
     let output = "";
     switch(incomeLevel) {
@@ -16,7 +29,6 @@ class Summary extends React.Component {
       case 8: output =  "More than $99,999"; break;
       default: output =  "Less than $30,000"; break;
     }
-
     return output;
   }
 
@@ -45,6 +57,7 @@ class Summary extends React.Component {
   }
   
   render() {
+    console.log(this.state.report);
     return (
       <section>
         <div className="row">
@@ -55,7 +68,6 @@ class Summary extends React.Component {
             </p>
           </div>
           <ul>
-            <li>EFC: ${this.props.getEFC().toFixed(2)}</li>
             <li>Financial Aid: </li>
             <li>Age: {this.props.userInputData.age}</li>
             <li>Living Arrangement: {this.props.userInputData.living}</li>
@@ -70,6 +82,15 @@ class Summary extends React.Component {
             <li>Number in family: {/*this.resolveFamilyMembers(this.props.userInputData.familyMembers)*/}</li>
             <li>Number in college: {/*this.resolveInCollege(this.props.userInputData.familyInCollege)*/}</li>
             <li>Household income: {/*this.resolveIncome(this.props.userInputData.householdIncome)*/}</li>
+          </ul>
+          <ul>
+            <li>EFC: ${this.state.report.EFC.toFixed(2)}</li>
+            <li>Tuition Aid Grant: ${this.state.report.TAG.toFixed(2)}</li>
+            <li>Total Cost of Admission: ${this.state.report.POA.totalCost.toFixed(2)}</li>
+            <li>Tuition and Fees: ${this.state.report.POA.tuitionAndFees.toFixed(2)}</li>
+            <li>Books and Supplies: ${this.state.report.POA.booksSupplies.toFixed(2)}</li>
+            <li>Room and Board: ${this.state.report.POA.roomAndBoard.toFixed(2)}</li>
+            <li>Other Expenses: ${this.state.report.POA.otherExpenses.toFixed(2)}</li>
           </ul>
         </div>
       </section>

@@ -14,8 +14,8 @@ class Step1 extends React.Component {
     if(!formData.get("actcomposite")) {
       if(formData.get("erwsat") && formData.get("mathsat")) {
         scores = {
-          erwsat: parseInt(formData.get("erwsat")),
-          mathsat: parseInt(formData.get("mathsat"))
+          erwsat: Number(formData.get("erwsat")),
+          mathsat: Number(formData.get("mathsat"))
         };
         document.querySelector(".form-validation-message").innerHTML = "";
       } else {
@@ -24,17 +24,17 @@ class Step1 extends React.Component {
       } 
     } else {
       scores = {
-        act: parseInt(formData.get("actcomposite"))
+        act: Number(formData.get("actcomposite"))
       };
       document.querySelector(".form-validation-message").innerHTML = "";
     }
     
     let stepData = {
       age: Number(formData.get("age")),
-      living: formData.get("living"),
+      living: Number(formData.get("living")),
       state: formData.get("state"),
       studentStatus: formData.get("hsOrTransfer"),
-      currentGPA: Number(parseFloat(formData.get("currentGPA")).toFixed(2)),
+      currentGPA: Number(formData.get("currentGPA")),
       scores: scores
     };
     //console.log(`${stepNumber}`);
@@ -70,9 +70,9 @@ class Step1 extends React.Component {
                       <strong>Living Arrangement</strong><br />
                       <p>Where do you plan to live while attending this institution?</p>
                       <fieldset>
-                        <input type="radio" name="living" value="onCampus" id="onCampus" ref={this.input} defaultChecked /><label htmlFor="onCampus">On-campus (in a residence hall, dormitory, or on-campus apartment)</label><br />
-                        <input type="radio" name="living" value="parentsOrFamily" id="parentsOrFamily" ref={this.input} /><label htmlFor="parentsOrFamily">Living with my parents or other family members</label><br />
-                        <input type="radio" name="living" value="aloneOrRoommate" id="aloneOrRoommate" ref={this.input} /><label htmlFor="aloneOrRoommate">Living on my own or with a roommate</label>
+                        <input type="radio" name="living" value="0" id="onCampus" ref={this.input} defaultChecked /><label htmlFor="onCampus">On-campus (in a residence hall, dormitory, or on-campus apartment)</label><br />
+                        <input type="radio" name="living" value="2" id="parentsOrFamily" ref={this.input} /><label htmlFor="parentsOrFamily">Living with my parents or other family members</label><br />
+                        <input type="radio" name="living" value="1" id="aloneOrRoommate" ref={this.input} /><label htmlFor="aloneOrRoommate">Living on my own or with a roommate</label>
                       </fieldset>
                     </label>
                   </div>
