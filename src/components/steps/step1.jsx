@@ -2,6 +2,26 @@ import React from 'react';
 
 class Step1 extends React.Component {
   
+  handleTestScoreInputChange = (event) => {
+    // NOTE: if the user is inputting an ACT score, disable the SAT boxes, we only need one or the other not both.
+    if(event.target.name === "actcomposite") {
+      if(document.getElementsByName("actcomposite")[0].value.length) {
+        document.getElementsByName("erwsat")[0].disabled = true;
+        document.getElementsByName("mathsat")[0].disabled = true;
+      } else {
+        document.getElementsByName("erwsat")[0].disabled = false;
+        document.getElementsByName("mathsat")[0].disabled = false;
+      }
+    } else {
+      // NOTE: user is inputting either an SAT written or math score, disable the ACT box instead.
+      if((document.getElementsByName("erwsat")[0].value.length) || (document.getElementsByName("mathsat")[0].value.length)) {
+        document.getElementsByName("actcomposite")[0].disabled = true;
+      } else {
+        document.getElementsByName("actcomposite")[0].disabled = false;
+      }
+    }
+  }
+
   submitStepHandler = (event) => {
     //console.log("submitStepHandler");
     event.preventDefault();
@@ -38,8 +58,6 @@ class Step1 extends React.Component {
       currentGPA: Number(formData.get("currentGPA")),
       scores: scores
     };
-    //console.log(`${stepNumber}`);
-    //console.log(stepData);
     this.props.saveStepData(stepData);
   }
 
@@ -79,11 +97,10 @@ class Step1 extends React.Component {
                   </div>
                   <div className="medium-3 cell">
                     <label>
-                      <strong>What is your state of residency?</strong><br />
+                      <strong>Are you a resident of New Jersey (where Seton Hall is located) or another US state or territory?</strong><br />
                       <select name="state">
                         <option value="New Jersey">New Jersey</option>
-                        <option value="New York">New York</option>
-                        <option value="Pennsylvania">Pennsylvania</option>
+                        <option value="other">Other State/Territory</option>
                       </select>
                     </label>
                   </div>
@@ -107,7 +124,7 @@ class Step1 extends React.Component {
                     <label>
                       <strong>Current GPA</strong>
                       <p>What is your current GPA?<br />(unweighted, on a 4.0 scale)</p>
-                      <input name="currentGPA" type="number" step="0.01" min="0.00" max="4.00" defaultValue="0.00" onChange={() => {this.value = parseFloat(this.value).toFixed(2)}} />
+                      <input name="currentGPA" type="number" step="0.001" min="0.000" max="4.000" defaultValue="0.000" onChange={() => {this.value = parseFloat(this.value).toFixed(3)}} />
                     </label>
                   </div>
                 </div>
@@ -119,18 +136,18 @@ class Step1 extends React.Component {
                     <div className="medium-6 cell">
                       <label>
                         <strong>What is your ERW SAT score?</strong>
-                        <input type="text" name="erwsat" />
+                        <input onChange={this.handleTestScoreInputChange} type="text" name="erwsat" />
                       </label>
                     </div>
                     <div className="medium-6 cell">
                       <label>
                         <strong>What is your Math SAT score?</strong>
-                        <input type="text" name="mathsat" />
+                        <input onChange={this.handleTestScoreInputChange} type="text" name="mathsat" />
                       </label>
                       <p>OR</p>
                       <label>
                         <strong>What is your ACT composite score?</strong>
-                        <input type="text" name="actcomposite" />
+                        <input onChange={this.handleTestScoreInputChange} type="text" name="actcomposite" />
                       </label>
                     </div>
                   </div>
@@ -149,7 +166,7 @@ class Step1 extends React.Component {
                   <div className="medium-3 cell medium-offset-5">
                     <input type="submit" className="button" value="Submit and Continue" />
                   </div>
-                  {/* NOTE: since this is the first screen, we can't go back further, no Previous button here. */}
+                  {/* NOTE: since this is the first screen, we don't need to start over. */}
                 </div>
               </div>
             </form>

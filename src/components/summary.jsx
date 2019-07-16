@@ -35,11 +35,11 @@ class Summary extends React.Component {
   resolveFamilyMembers = (fm) => {
     let output = "";
     switch(fm) {
-      case 0: output = "Two"; break;
-      case 1: output = "Three";  break;
-      case 2: output = "Four"; break;
-      case 3: output = "Five"; break;
-      case 4: output = "Six or more"; break;
+      case 2: output = "Two"; break;
+      case 3: output = "Three";  break;
+      case 4: output = "Four"; break;
+      case 5: output = "Five"; break;
+      case 6: output = "Six or more"; break;
       default: output = "Two"; break;
     }
      return output;
@@ -48,16 +48,15 @@ class Summary extends React.Component {
   resolveInCollege = (numInCollege) => {
     let output = "";
     switch(numInCollege) {
-      case 0: output = "One"; break;
-      case 1: output = "Two"; break;
-      case 2: output = "Three or more"; break;
+      case 1: output = "One"; break;
+      case 2: output = "Two"; break;
+      case 3: output = "Three or more"; break;
       default: output = "One";
     }
      return output;
   }
   
   render() {
-    //console.log(this.state.report);
     return (
       <section>
         <div className="row">
@@ -96,7 +95,7 @@ class Summary extends React.Component {
             <li>Merit Award: ${this.state.report.Merit.toFixed(2)}</li>
             <li>Tuition Aid Grant: ${this.state.report.TAG.toFixed(2)}</li>
             <li>Pell Grant Amount: ${this.state.report.Pell.toFixed(2)}</li>*/}
-            <li>Estimated Total Grant Amount: ${this.state.report.Total.toFixed(2)} <br />(Includes both merit and need based aid from all sources - federal, state and institutional)</li>
+            <li><strong>Estimated Total Grant Amount: ${this.state.report.Total.toFixed(2)}</strong> <br />(Includes both merit and need based aid from all sources - federal, state and institutional)</li>
             <li><strong>Estimated net price: ${(this.state.report.POA.totalCost - this.state.report.Total).toFixed(2)}</strong><br /> (Direct Cost minus grant aid)</li>
             <hr />
             <em>In addition to direct costs, you should plan to cover any additional indirect costs. Here are some approximate costs you should be aware of:</em> 

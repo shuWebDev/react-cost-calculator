@@ -13,9 +13,6 @@ class Step3 extends React.Component {
       familyInCollege: Number(formData.get("familyInCollege")),
       householdIncome: Number(formData.get("householdIncome"))
     };
-    
-    //console.log(`${stepNumber}`);
-    //console.log(stepData);
     this.props.saveStepData(stepData);
   }
 
