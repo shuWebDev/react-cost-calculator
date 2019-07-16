@@ -16,9 +16,9 @@ class App extends React.Component {
       tag: [],
       // NOTE: userInputData: object to capture all the user input for the calculations
       userInputData: {},
-      calculationOutput: {
+      /*calculationOutput: {
         efc: 0
-      }
+      }*/
     };
   }
 
@@ -51,13 +51,17 @@ class App extends React.Component {
     let POAValue = this.getPOA();
     let PellValue = this.calculatePell(EFCValue);
     let NeedsBasedEFC = this.calculateNeedsBasedEFC(EFCValue);
+    let Merit = this.calculateMerit();
+    let totalGrant = TAGValue + PellValue + NeedsBasedEFC + Merit;
     
     let calculationReport = {
       EFC: EFCValue,
       TAG: TAGValue,
       POA: POAValue,
       Pell: PellValue,
-      NeedsBasedEFC: NeedsBasedEFC
+      NeedsBasedEFC: NeedsBasedEFC,
+      Merit: Merit,
+      Total: totalGrant
     };
     return calculationReport;
   }
@@ -198,24 +202,22 @@ class App extends React.Component {
     let satScore = 0, actScore = 0;
     // NOTE: get whichever score we need. 
     if(needTestMode === "sat") {
-      satScore = this.state.userInputData.scores.erwsat + this.state.userInputData.scores.mathsat 
+      satScore = this.state.userInputData.scores.erwsat + this.state.userInputData.scores.mathsat; 
     } else {
       actScore = this.state.userInputData.scores.act;
     }
     
-    let GPA = this.state.userInputData.GPA;
+    let GPA = this.state.userInputData.currentGPA;
     let needsData; // NOTE: will hold the data we look up on based on combination of residency status and HS student or transfer
-   
     // NOTE: determine HS or Transfer
     if(HSorTransfer === "highschool") {
       // NOTE: determine residency
       if(residencyStatus === "New Jersey") {
       // NOTE: determine if we have ACT or SAT data to work with
-        needsData = (needTestMode === "act") ? this.state.efc.needsBasedEFC.efcactnjresident : this.state.efc.needsBasedEFC.efcactnonresident;
+        needsData = (needTestMode === "act") ? this.state.efc.needsBasedEFC.efcactnjresident : this.state.efc.needsBasedEFC.efcsatnonresident;
       } else {
         // NOTE: user is highschool but non-resident
         needsData = (needTestMode === "act") ? this.state.efc.needsBasedEFC.efcactnonresident : this.state.efc.needsBasedEFC.efcsatnonresident;
-
       }
     } else {
       // NOTE: user is transfer
@@ -231,7 +233,7 @@ class App extends React.Component {
     // NOTE: now using the proper table we determined above, look up the values
     // Based on GPA: [efc-range-lower, efc-range-upper, (gpa < 2.999)value, (gpa 3.0 - 3.499) value, (gpa 3.5+) value]
     // Based on SAT/ACT (combine SAT scores first): [efc-range-lower, efc-range-upper, (ACT/SAT <= lower bound) value, (ACT/SAT between lower and upper bounds)value, (ACT/SAT > upper bound)value]
-
+    
     for(let i=0; i<needsData.length; i++) {
       // NOTE: find the row we need, based on if efc is between the range of first 2 values in array. the 3rd-5th values are needs values based on test score range
       if((efc >= needsData[i][0]) && (efc <= needsData[i][1])) {
@@ -240,54 +242,109 @@ class App extends React.Component {
           if(needTestMode === "act") {
             if((actScore <= ACTrange.lower)) {
               calculatedNeedsEFC = needsData[i][2];
-              break;
+              return calculatedNeedsEFC;
             }
             if((actScore > ACTrange.lower) && (actScore < ACTrange.upper)) {
               calculatedNeedsEFC = needsData[i][3];
-              break;
+              return calculatedNeedsEFC;
             }
-            if((actScore > ACTrange.upper)) {
+            if((actScore >= ACTrange.upper)) {
               calculatedNeedsEFC = needsData[i][4];
-              break;
+              return calculatedNeedsEFC;
             }
           } else {
             // NOTE: user provided SAT score so we're using that instead of ACT to determine
             if((satScore <= SATrange.lower)) {
               calculatedNeedsEFC = needsData[i][2];
-              break;
+              return calculatedNeedsEFC;
             }
             if((satScore > SATrange.lower) && (satScore < SATrange.upper)) {
               calculatedNeedsEFC = needsData[i][3];
-              break;
+              return calculatedNeedsEFC;
             }
-            if((satScore > SATrange.upper)) {
+            if((satScore >= SATrange.upper)) {
               calculatedNeedsEFC = needsData[i][4];
-              break;
+              return calculatedNeedsEFC;
             }
           }
         }
       } else {
         // NOTE: user is a transfer student, this data uses incoming GPA instead of test scores
-       
         for(let i=0; i<needsData.length; i++) {
           if((efc >= needsData[i][0]) && (efc <= needsData[i][1])) {
             if(GPA <= 2.999) {
               calculatedNeedsEFC = needsData[i][2];
-              break;
+              return calculatedNeedsEFC;
             }
             if((GPA >= 3.0) && (GPA < 3.499)) {
               calculatedNeedsEFC = needsData[i][3];
-              break;
+              return calculatedNeedsEFC;
             }
             if(GPA >= 3.5) {
               calculatedNeedsEFC = needsData[i][4];
-              break;
+              return calculatedNeedsEFC;
             }
           }
         } 
       }
     }
-    return calculatedNeedsEFC;
+  }
+
+  calculateMerit = () => {
+    let meritData;
+    let meritAwardValue = 0; // NOTE: this is our award amount we return
+    let GPA = this.state.userInputData.currentGPA;
+
+    // NOTE: first determine if user is freshman/current HS student or tansfer
+    if(this.state.userInputData.studentStatus === "highschool") {
+      // NOTE: user is current HS/incoming freshman, now determine if we are going by SAT or ACT
+      let meritTestMode = (this.state.userInputData.scores.act) ? "act" : "sat";
+      let satScore = 0, actScore = 0;
+      
+      // NOTE: get whichever score we need. 
+      if(meritTestMode === "sat") {
+        satScore = this.state.userInputData.scores.erwsat + this.state.userInputData.scores.mathsat;
+        meritData = this.state.merit.meritsat;
+        console.log(`MERIT SAT Score: ${satScore}`);
+      } else {
+        // NOTE: use ACT instead of SAT
+        actScore = this.state.userInputData.scores.act;
+        meritData = this.state.merit.meritact;
+        console.log(`MERIT ACT Score: ${actScore}`);
+      }
+      console.log(`MERIT GPA: ${GPA}`);
+      // NOTE: based on which test score we have, find the row of data we need
+      // NOTE: first compare test score to range of [i][0]-[i][1], then compare GPA to range of [i][2]-[i][3] and if both check out, [i][4] is your merit value
+      if(meritTestMode === "sat") {
+        for(let i=0; i<meritData.length; i++) {
+          if((satScore >= meritData[i][0]) && (satScore <= meritData[i][1])) {
+            if((GPA >= meritData[i][2]) && (GPA <= meritData[i][3])) {
+              meritAwardValue = meritData[i][4];
+              return meritAwardValue;
+            }
+          }
+        }
+      } else {
+        // NOTE: we're using ACT to determine instead
+        for(let i=0; i<meritData.length; i++) {
+          if((actScore >= meritData[i][0]) && (actScore <= meritData[i][1])) {
+            if((GPA >= meritData[i][2]) && (GPA <= meritData[i][3])) {
+              meritAwardValue = meritData[i][4];
+              return meritAwardValue;
+            }
+          }
+        }
+      }
+    } else {
+      // NOTE: user is transfer student, go by GPA
+      meritData = this.state.merit.merittransfer;
+      for(let i=0; i<meritData.length; i++) {
+        if((GPA >= meritData[i][0]) && (GPA <= meritData[i][1])) {
+          meritAwardValue = meritData[i][2];
+          return meritAwardValue;
+        }
+      }
+    }
   }
 
   fetchAllData = () => {
@@ -305,7 +362,7 @@ class App extends React.Component {
           pell: pell,
           tag: tag,
           merit: merit
-        }, () => {console.log("data loaded");});
+        }, () => {/*console.log("data loaded");*/});
       });  
     } catch(e) {
       console.log(e);

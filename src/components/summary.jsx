@@ -57,7 +57,7 @@ class Summary extends React.Component {
   }
   
   render() {
-    console.log(this.state.report);
+    //console.log(this.state.report);
     return (
       <section>
         <div className="row">
@@ -82,15 +82,29 @@ class Summary extends React.Component {
             <li>Number in college: {this.resolveInCollege(this.props.userInputData.familyInCollege)}</li>
             <li>Household income: {this.resolveIncome(this.props.userInputData.householdIncome)}</li>
           </ul>
+          <h4>Based on the information you have provided, the following calculations represent the average net price of attendance that students similar to you paid in the given year:</h4>
+          <h5>Academic Year: 2019-2020</h5>
+          <hr />
           <ul>
-            <li>EFC: ${this.state.report.EFC.toFixed(2)}</li>
-            <li>Needs Based on EFC: ${this.state.report.NeedsBasedEFC}</li>
+            <li><strong>Estimated Total Direct Cost: ${this.state.report.POA.totalCost.toFixed(2)}</strong></li>
+            <ul>
+              <li>Estimated Tuition and Fees: ${this.state.report.POA.tuitionAndFees.toFixed(2)}</li>
+              <li>Estimated Room and Board: ${this.state.report.POA.roomAndBoard.toFixed(2)}</li>
+            </ul>
+            {/*<li>Expected Family Contribution: ${this.state.report.EFC.toFixed(2)}</li>
+            <li>Needs Grant Based on EFC: ${this.state.report.NeedsBasedEFC.toFixed(2)}</li>
+            <li>Merit Award: ${this.state.report.Merit.toFixed(2)}</li>
             <li>Tuition Aid Grant: ${this.state.report.TAG.toFixed(2)}</li>
-            <li>Total Cost of Admission: ${this.state.report.POA.totalCost.toFixed(2)}</li>
-            <li>Tuition and Fees: ${this.state.report.POA.tuitionAndFees.toFixed(2)}</li>
+            <li>Pell Grant Amount: ${this.state.report.Pell.toFixed(2)}</li>*/}
+            <li>Estimated Total Grant Amount: ${this.state.report.Total.toFixed(2)} <br />(Includes both merit and need based aid from all sources - federal, state and institutional)</li>
+            <li><strong>Estimated net price: ${(this.state.report.POA.totalCost - this.state.report.Total).toFixed(2)}</strong><br /> (Direct Cost minus grant aid)</li>
+            <hr />
+            <em>In addition to direct costs, you should plan to cover any additional indirect costs. Here are some approximate costs you should be aware of:</em> 
+          </ul>
+          <ul>
             <li>Books and Supplies: ${this.state.report.POA.booksSupplies.toFixed(2)}</li>
-            <li>Room and Board: ${this.state.report.POA.roomAndBoard.toFixed(2)}</li>
             <li>Other Expenses: ${this.state.report.POA.otherExpenses.toFixed(2)}</li>
+            <li>Room and board (off-campus): $6000.00</li>
           </ul>
         </div>
       </section>
