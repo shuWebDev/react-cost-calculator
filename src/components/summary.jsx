@@ -68,7 +68,6 @@ class Summary extends React.Component {
             </p>
           </div>
           <ul>
-            <li>Financial Aid: </li>
             <li>Age: {this.props.userInputData.age}</li>
             <li>Living Arrangement: {this.props.userInputData.living}</li>
             <li>State of residency: {this.props.userInputData.state}</li>
@@ -79,12 +78,13 @@ class Summary extends React.Component {
             <li>Transfer Status: {this.props.userInputData.studentStatus}</li>
             <li>Martial Status: {this.props.userInputData.marital}</li>
             <li>Supporting Children: {this.props.userInputData.childSupport}</li>
-            <li>Number in family: {/*this.resolveFamilyMembers(this.props.userInputData.familyMembers)*/}</li>
-            <li>Number in college: {/*this.resolveInCollege(this.props.userInputData.familyInCollege)*/}</li>
-            <li>Household income: {/*this.resolveIncome(this.props.userInputData.householdIncome)*/}</li>
+            <li>Number in family: {this.resolveFamilyMembers(this.props.userInputData.familyMembers)}</li>
+            <li>Number in college: {this.resolveInCollege(this.props.userInputData.familyInCollege)}</li>
+            <li>Household income: {this.resolveIncome(this.props.userInputData.householdIncome)}</li>
           </ul>
           <ul>
             <li>EFC: ${this.state.report.EFC.toFixed(2)}</li>
+            <li>Needs Based on EFC: ${this.state.report.NeedsBasedEFC}</li>
             <li>Tuition Aid Grant: ${this.state.report.TAG.toFixed(2)}</li>
             <li>Total Cost of Admission: ${this.state.report.POA.totalCost.toFixed(2)}</li>
             <li>Tuition and Fees: ${this.state.report.POA.tuitionAndFees.toFixed(2)}</li>

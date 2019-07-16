@@ -26,18 +26,6 @@ class App extends React.Component {
     this.fetchAllData();
   }
 
-  /*generateReport = () => {
-    let SAT = {
-      lower: 1120,
-      upper: 1310
-    };
-
-    let ACT = {
-      lower: 22,
-      upper: 27
-    };
-  }*/
-
   determineDependency = () => {
     let dependent = false;
     // NOTE: check if user's age < 24 
@@ -55,20 +43,37 @@ class App extends React.Component {
     return dependent;
   }
 
-
   // NOTE: generate the calculated report
   generateReport = () => {
     let EFCValue = this.getEFC();
     // NOTE: Tuition aid grant value is depenednt on EFC value
     let TAGValue = this.getTAG(EFCValue);
     let POAValue = this.getPOA();
+    let PellValue = this.calculatePell(EFCValue);
+    let NeedsBasedEFC = this.calculateNeedsBasedEFC(EFCValue);
     
     let calculationReport = {
       EFC: EFCValue,
       TAG: TAGValue,
-      POA: POAValue
+      POA: POAValue,
+      Pell: PellValue,
+      NeedsBasedEFC: NeedsBasedEFC
     };
     return calculationReport;
+  }
+
+  // NOTE: calculate Pell grant amount
+  calculatePell = (efc) => {
+    let pell = this.state.pell; // NOTE: values from pell.json
+    let calculatedPell = 0;
+
+    for(let i=0; i<pell.length; i++) {
+      if((efc >= pell[i][0]) && efc <= pell[i][1]) {
+        calculatedPell = pell[i][2];
+        break;
+      }
+    }
+    return calculatedPell;
   }
 
   // NOTE: compute TAG/Tuition Aid Grant value
@@ -97,7 +102,7 @@ class App extends React.Component {
         for(let j=0; j<this.state.efc.efcDependent[i].length; j++) {
           if(this.state.efc.efcDependent[i][j].numberInCollege === this.state.userInputData.familyInCollege) {
             if(this.state.efc.efcDependent[i][j].numberInFamily === this.state.userInputData.familyMembers) {
-              console.log(`FOUND: ${this.state.efc.efcDependent[i][j].incomeRanges[this.state.userInputData.householdIncome]}`);
+              //console.log(`FOUND: ${this.state.efc.efcDependent[i][j].incomeRanges[this.state.userInputData.householdIncome]}`);
               efc = this.state.efc.efcDependent[i][j].incomeRanges[this.state.userInputData.householdIncome];
               break; // NOTE: break out of loop, we found the figure we need
             }
@@ -113,7 +118,7 @@ class App extends React.Component {
           for(let j=0; j<this.state.efc.efcNotDependentButHasDependent[i].length; j++) {
             if(this.state.efc.efcNotDependentButHasDependent[i][j].numberInCollege === this.state.userInputData.familyInCollege) {
               if(this.state.efc.efcNotDependentButHasDependent[i][j].numberInFamily === this.state.userInputData.familyMembers) {
-                console.log(`FOUND: ${this.state.efc.efcNotDependentButHasDependent[i][j].incomeRanges[this.state.userInputData.householdIncome]}`);
+                //console.log(`FOUND: ${this.state.efc.efcNotDependentButHasDependent[i][j].incomeRanges[this.state.userInputData.householdIncome]}`);
                 efc = this.state.efc.efcNotDependentButHasDependent[i][j].incomeRanges[this.state.userInputData.householdIncome];
                 break; // NOTE: break out of the loop, we found the figure we need
               }
@@ -174,6 +179,116 @@ class App extends React.Component {
     return calculatedPOAValues;
   }
 
+  calculateNeedsBasedEFC = (efc) => {
+    let SATrange = {
+      lower: 1120,
+      upper: 1310
+    };
+
+    let ACTrange = {
+      lower: 22,
+      upper: 27
+    };
+
+    let needTestMode = (this.state.userInputData.scores.act) ? "act" : "sat";
+    let residencyStatus = (this.state.userInputData.state === "New Jersey") ? "resident" : "non-resident";
+    let HSorTransfer = this.state.userInputData.studentStatus;
+    let calculatedNeedsEFC; // NOTE: our final needs EFC calculation result
+    
+    let satScore = 0, actScore = 0;
+    // NOTE: get whichever score we need. 
+    if(needTestMode === "sat") {
+      satScore = this.state.userInputData.scores.erwsat + this.state.userInputData.scores.mathsat 
+    } else {
+      actScore = this.state.userInputData.scores.act;
+    }
+    
+    let GPA = this.state.userInputData.GPA;
+    let needsData; // NOTE: will hold the data we look up on based on combination of residency status and HS student or transfer
+   
+    // NOTE: determine HS or Transfer
+    if(HSorTransfer === "highschool") {
+      // NOTE: determine residency
+      if(residencyStatus === "New Jersey") {
+      // NOTE: determine if we have ACT or SAT data to work with
+        needsData = (needTestMode === "act") ? this.state.efc.needsBasedEFC.efcactnjresident : this.state.efc.needsBasedEFC.efcactnonresident;
+      } else {
+        // NOTE: user is highschool but non-resident
+        needsData = (needTestMode === "act") ? this.state.efc.needsBasedEFC.efcactnonresident : this.state.efc.needsBasedEFC.efcsatnonresident;
+
+      }
+    } else {
+      // NOTE: user is transfer
+      if (residencyStatus === "New Jersey") {
+        // NOTE: user is transfer AND NJ resident
+        needsData = this.state.efc.needsBasedTransfer.efcGPATransferResident;
+      } else {
+        // NOTE: user is transfer and non-resident
+        needsData = this.state.efc.needsBasedTransfer.efcGPATransferNonResident;
+      }
+    }
+
+    // NOTE: now using the proper table we determined above, look up the values
+    // Based on GPA: [efc-range-lower, efc-range-upper, (gpa < 2.999)value, (gpa 3.0 - 3.499) value, (gpa 3.5+) value]
+    // Based on SAT/ACT (combine SAT scores first): [efc-range-lower, efc-range-upper, (ACT/SAT <= lower bound) value, (ACT/SAT between lower and upper bounds)value, (ACT/SAT > upper bound)value]
+
+    for(let i=0; i<needsData.length; i++) {
+      // NOTE: find the row we need, based on if efc is between the range of first 2 values in array. the 3rd-5th values are needs values based on test score range
+      if((efc >= needsData[i][0]) && (efc <= needsData[i][1])) {
+        if(HSorTransfer === "highschool") {
+          // NOTE: freshmen are based on SAT/ACT score, transfers based on GPA
+          if(needTestMode === "act") {
+            if((actScore <= ACTrange.lower)) {
+              calculatedNeedsEFC = needsData[i][2];
+              break;
+            }
+            if((actScore > ACTrange.lower) && (actScore < ACTrange.upper)) {
+              calculatedNeedsEFC = needsData[i][3];
+              break;
+            }
+            if((actScore > ACTrange.upper)) {
+              calculatedNeedsEFC = needsData[i][4];
+              break;
+            }
+          } else {
+            // NOTE: user provided SAT score so we're using that instead of ACT to determine
+            if((satScore <= SATrange.lower)) {
+              calculatedNeedsEFC = needsData[i][2];
+              break;
+            }
+            if((satScore > SATrange.lower) && (satScore < SATrange.upper)) {
+              calculatedNeedsEFC = needsData[i][3];
+              break;
+            }
+            if((satScore > SATrange.upper)) {
+              calculatedNeedsEFC = needsData[i][4];
+              break;
+            }
+          }
+        }
+      } else {
+        // NOTE: user is a transfer student, this data uses incoming GPA instead of test scores
+       
+        for(let i=0; i<needsData.length; i++) {
+          if((efc >= needsData[i][0]) && (efc <= needsData[i][1])) {
+            if(GPA <= 2.999) {
+              calculatedNeedsEFC = needsData[i][2];
+              break;
+            }
+            if((GPA >= 3.0) && (GPA < 3.499)) {
+              calculatedNeedsEFC = needsData[i][3];
+              break;
+            }
+            if(GPA >= 3.5) {
+              calculatedNeedsEFC = needsData[i][4];
+              break;
+            }
+          }
+        } 
+      }
+    }
+    return calculatedNeedsEFC;
+  }
 
   fetchAllData = () => {
     try {

@@ -7,14 +7,12 @@ class Step2 extends React.Component {
     // NOTE: this will get the data off the form submitted
     const formData = new FormData(event.target);
     //console.log(formData);
-    let stepNumber = formData.get("stepNumber");
+    //let stepNumber = formData.get("stepNumber");
     let stepData = {
       marital: formData.get("marital"),
       childSupport: formData.get("primaryChildSupport")
     };
     
-    //console.log(`${stepNumber}`);
-    //console.log(stepData);
     this.props.saveStepData(stepData);
   }
 

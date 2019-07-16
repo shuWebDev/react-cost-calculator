@@ -7,7 +7,8 @@ class Step1 extends React.Component {
     event.preventDefault();
     // NOTE: this will get the data off the form submitted
     const formData = new FormData(event.target);
-    let scores, stepNumber = formData.get("stepNumber");
+    let scores;
+    //let stepNumber = formData.get("stepNumber");
 
     // NOTE: validate the Test Scores section
     // BOTH SAT scores OR the ACT Composite score
