@@ -1,6 +1,11 @@
 import React from 'react';
 import Intro from './components/intro';
 import AppCore from './components/appcore';
+import * as EFCData from "./data/efc.json";
+import * as POAData from "./data/poa.json";
+import * as PellData from "./data/pell.json";
+import * as TAGData from "./data/tag.json";
+import * as MeritData from "./data/merit.json";
 
 class App extends React.Component {
   constructor(props) {
@@ -14,6 +19,7 @@ class App extends React.Component {
       poa: {},
       pell: [],
       tag: [],
+      merit: [],
       // NOTE: userInputData: object to capture all the user input for the calculations
       userInputData: {},
       /*calculationOutput: {
@@ -22,8 +28,41 @@ class App extends React.Component {
     };
   }
 
+  loadData = () => {
+    this.setState({
+      efc: EFCData.default,
+      poa: POAData.default,
+      pell: PellData.default,
+      tag: TAGData.default,
+      merit: MeritData.default
+    });
+    return;
+  }
+
+  /*fetchAllData = () => {
+    try {
+      Promise.all([
+        fetch("/efc.json").then(response => response.json()),
+        fetch("/poa.json").then(response => response.json()),
+        fetch("/pell.json").then(response => response.json()),
+        fetch("/tag.json").then(response => response.json()),
+        fetch("/merit.json").then(response => response.json())
+      ]).then(([efc, poa, pell, tag, merit]) => {
+        this.setState({
+          efc: efc,
+          poa: poa,
+          pell: pell,
+          tag: tag,
+          merit: merit
+        }, () => {console.log("data loaded");});
+      });  
+    } catch(e) {
+      console.log(e);
+    }
+  }*/
+
   componentWillMount() {
-    this.fetchAllData();
+    this.loadData();
   }
 
   determineDependency = () => {
@@ -344,28 +383,6 @@ class App extends React.Component {
           return meritAwardValue;
         }
       }
-    }
-  }
-
-  fetchAllData = () => {
-    try {
-      Promise.all([
-        fetch("/efc.json").then(response => response.json()),
-        fetch("/poa.json").then(response => response.json()),
-        fetch("/pell.json").then(response => response.json()),
-        fetch("/tag.json").then(response => response.json()),
-        fetch("/merit.json").then(response => response.json())
-      ]).then(([efc, poa, pell, tag, merit]) => {
-        this.setState({
-          efc: efc,
-          poa: poa,
-          pell: pell,
-          tag: tag,
-          merit: merit
-        }, () => {/*console.log("data loaded");*/});
-      });  
-    } catch(e) {
-      console.log(e);
     }
   }
 
