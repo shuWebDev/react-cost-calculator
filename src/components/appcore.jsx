@@ -12,7 +12,7 @@ class AppCore extends React.Component {
 
       case 2: return <Step2 saveStepData={this.props.saveStepData} />; 
 
-      case 3: return <Step3 saveStepData={this.props.saveStepData} />;
+      case 3: return <Step3 saveStepData={this.props.saveStepData} dependency={this.props.dependency} />;
 
       case 4: return <Summary generateReport={this.props.generateReport} userInputData={this.props.userInputData} />;
 

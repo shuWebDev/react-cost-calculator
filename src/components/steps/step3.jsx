@@ -22,7 +22,7 @@ class Step3 extends React.Component {
         <div className="row">
           <div className="medium-12 columns">
             <h3>Step 3</h3>
-            <p>Based on the information you provided in previous steps, your dependency status is estimated to be <strong>Dependent</strong>.</p>
+            <p>Based on the information you provided in previous steps, your dependency status is estimated to be <strong>{(this.props.dependency === 0)? "a Dependent" : "Not a Dependent"}</strong>.</p>
           </div>
           <hr />
           <form onSubmit={this.submitStepHandler}>

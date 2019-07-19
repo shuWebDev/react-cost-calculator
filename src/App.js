@@ -417,7 +417,7 @@ class App extends React.Component {
       )
     } else {
       // User has clicked "accept", move control to the rest of app
-      return <AppCore generateReport={this.generateReport} saveStepData={this.saveStepData} currentStep={this.state.currentStep} handlePreviousButtonClick={this.handlePreviousButtonClick} changeHandler={this.changeHandler} userInputData={this.state.userInputData} />
+      return <AppCore dependency={this.state.dependency} generateReport={this.generateReport} saveStepData={this.saveStepData} currentStep={this.state.currentStep} handlePreviousButtonClick={this.handlePreviousButtonClick} changeHandler={this.changeHandler} userInputData={this.state.userInputData} />
     }
   }
 }
