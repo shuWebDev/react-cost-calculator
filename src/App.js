@@ -14,7 +14,6 @@ class App extends React.Component {
     this.state = {
       disclaimerAccepted: false,
       currentStep: 0,
-      stepData: {},
       efc: {},
       poa: {},
       pell: [],
@@ -22,9 +21,6 @@ class App extends React.Component {
       merit: [],
       // NOTE: userInputData: object to capture all the user input for the calculations
       userInputData: {},
-      /*calculationOutput: {
-        efc: 0
-      }*/
     };
   }
 
@@ -156,7 +152,7 @@ class App extends React.Component {
       // NOTE: user is not a dependent, determine if they have children as dependents
       if(this.state.userInputData.childSupport === "yes") {
         // NOTE: user has no dependent children
-        console.log("user is NOT dependent, but HAS dependent(s)");
+        //console.log("user is NOT dependent, but HAS dependent(s)");
         for(let i=0; i<this.state.efc.efcNotDependentButHasDependent.length; i++) {
           for(let j=0; j<this.state.efc.efcNotDependentButHasDependent[i].length; j++) {
             if(this.state.efc.efcNotDependentButHasDependent[i][j].numberInCollege === this.state.userInputData.familyInCollege) {
@@ -169,7 +165,7 @@ class App extends React.Component {
           } 
         } 
       } else {
-        console.log("user is NOT dependent, and HAS NO dependents");
+        //console.log("user is NOT dependent, and HAS NO dependents");
         // NOTE: user is not a dependent and has no dependent children
         for(let i=0; i<this.state.efc.efcNotDependentAndNoDependent.length; i++) {
           for(let j=0; j<this.state.efc.efcNotDependentAndNoDependent[i].length; j++) {
@@ -271,7 +267,7 @@ class App extends React.Component {
 
     // NOTE: now using the proper table we determined above, look up the values
     // Based on GPA: [efc-range-lower, efc-range-upper, (gpa < 2.999)value, (gpa 3.0 - 3.499) value, (gpa 3.5+) value]
-    // Based on SAT/ACT (combine SAT scores first): [efc-range-lower, efc-range-upper, (ACT/SAT <= lower bound) value, (ACT/SAT between lower and upper bounds)value, (ACT/SAT > upper bound)value]
+    // Based on SAT/ACT (combine SAT scores first): [efc-range-lower, efc-range-upper, (ACT/SAT <= lower bound) value, (ACT/SAT between lower and upper bounds)value (inclusive), (ACT/SAT > upper bound)value]
     
     for(let i=0; i<needsData.length; i++) {
       // NOTE: find the row we need, based on if efc is between the range of first 2 values in array. the 3rd-5th values are needs values based on test score range

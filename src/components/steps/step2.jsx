@@ -2,12 +2,9 @@ import React from 'react';
 
 class Step2 extends React.Component {
   submitStepHandler = (event) => {
-    //console.log("submitStepHandler");
     event.preventDefault();
     // NOTE: this will get the data off the form submitted
     const formData = new FormData(event.target);
-    //console.log(formData);
-    //let stepNumber = formData.get("stepNumber");
     let stepData = {
       marital: formData.get("marital"),
       childSupport: formData.get("primaryChildSupport")
@@ -37,8 +34,8 @@ class Step2 extends React.Component {
                       (Answer "yes" if separated but not divorced.)
                     </p>
                     <fieldset>
-                      <input type="radio" name="marital" value="yes" id="maritalYes" ref={this.input} defaultChecked /><label htmlFor="maritalYes">Yes</label><br />
-                      <input type="radio" name="marital" value="no" id="maritalNo" ref={this.input} /><label htmlFor="maritalNo">No</label>
+                      <input type="radio" name="marital" value="no" id="maritalNo" ref={this.input} defaultChecked /><label htmlFor="maritalNo">No</label><br />
+                      <input type="radio" name="marital" value="yes" id="maritalYes" ref={this.input}  /><label htmlFor="maritalYes">Yes</label>
                     </fieldset>
                   </label>
                 </div>
@@ -47,8 +44,8 @@ class Step2 extends React.Component {
                     <strong>Children</strong>
                     <p>Are you (the student) the primary source of financial support for any children?</p>
                     <fieldset>
-                      <input type="radio" name="primaryChildSupport" value="yes" id="primaryChildSupportYes" ref={this.input} defaultChecked /><label htmlFor="primaryChildSupportYes">Yes</label><br />
-                      <input type="radio" name="primaryChildSupport" value="no" id="primaryChildSupportNo" ref={this.input} /><label htmlFor="primaryChildSupportNo">No</label>
+                      <input type="radio" name="primaryChildSupport" value="no" id="primaryChildSupportNo" ref={this.input} defaultChecked /><label htmlFor="primaryChildSupportNo">No</label><br />
+                      <input type="radio" name="primaryChildSupport" value="yes" id="primaryChildSupportYes" ref={this.input} /><label htmlFor="primaryChildSupportYes">Yes</label>
                     </fieldset>
                   </label>
                 </div>
@@ -58,7 +55,7 @@ class Step2 extends React.Component {
             <div className="grid-container">
               <div className="grid-x grid-padding-x">
               <div className="medium-3 cell medium-offset-1">
-                <button className="button" onClick={() => {this.props.handlePreviousButtonClick(2)}}>Previous Screen</button>
+                {/*<button className="button" onClick={() => {this.props.handlePreviousButtonClick(2)}}>Previous Screen</button>*/}
                 </div>
                 <div className="medium-3 cell medium-offset-3">
                   <input type="submit" className="button" value="Save and Continue" />

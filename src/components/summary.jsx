@@ -55,6 +55,14 @@ class Summary extends React.Component {
     }
      return output;
   }
+
+  resolveLivingArrangement = (living) => {
+    switch(living) {
+      case 1: return "Living with my parents or other family members";
+      case 2: return "Living on my own or with a roommate";
+      default: return "Living On Campus";
+    }
+  }
   
   render() {
     return (
@@ -68,13 +76,13 @@ class Summary extends React.Component {
               </p>
               <ul>
                 <li>Age: {this.props.userInputData.age}</li>
-                <li>Living Arrangement: {this.props.userInputData.living}</li>
+                <li>Living Arrangement: {this.resolveLivingArrangement(this.props.userInputData.living)}</li>
                 <li>State of residency: {this.props.userInputData.state}</li>
                 <li>GPA: {this.props.userInputData.currentGPA}</li>
                 <li>ERW SAT: {this.props.userInputData.scores.erwsat || "N/A"}</li>
                 <li>Math SAT: {this.props.userInputData.scores.mathsat || "N/A"}</li>
                 <li>ACT Score: {this.props.userInputData.scores.act || "N/A"}</li>
-                <li>Transfer Status: {this.props.userInputData.studentStatus}</li>
+                <li>Transfer Status: {(this.props.userInputData.studentStatus === "highschool")? "High School" : "Transfer Student"}</li>
                 <li>Martial Status: {this.props.userInputData.marital}</li>
                 <li>Supporting Children: {this.props.userInputData.childSupport}</li>
                 <li>Number in family: {this.resolveFamilyMembers(this.props.userInputData.familyMembers)}</li>
@@ -85,10 +93,8 @@ class Summary extends React.Component {
           </div>
         </section>
         <div className="row">
-          <div className="medium-12 columns medium-push-3">
-          <button className="button" onClick={() => {return null;}}>Modify</button>
-            <button className="button" onClick={() => {document.getElementById("report-output").style.display = "block";}}>Generate Report</button>
-          </div>
+          {/*<button className="medium-2 columns medium-push-3 button" onClick={() => {return null;}}>Modify</button>*/}
+          <button className="medium-2 columns medium-pull-3 button" onClick={() => {document.getElementById("report-output").style.display = "block";}}>Generate Report</button>
         </div>
         <section style={{"display": "none"}} id="report-output">
           <div className="row">
