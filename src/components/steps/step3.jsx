@@ -2,12 +2,20 @@ import React from 'react';
 
 class Step3 extends React.Component {
   submitStepHandler = (event) => {
-    //console.log("submitStepHandler");
     event.preventDefault();
     // NOTE: this will get the data off the form submitted
     const formData = new FormData(event.target);
-    //console.log(formData);
-    //let stepNumber = formData.get("stepNumber");
+    
+    // NOTE: validate Number in family vs Number in college
+    // i.e.: "Two people in family" AND "Three or more children in college" doesn't make sense
+    if(Number(formData.get("familyInCollege")) === Number(formData.get("familyMembers"))) {
+      // NOTE: Number of family members can't equal the number of children in college when family includes parent(s)
+      document.querySelector(".form-validation-message").innerHTML = `<div class="callout alert"><p>The number of children in college cannot equal the number of total family members (Number in family <em>includes parent(s) and siblings under age 24</em></p></div>`;
+      return;
+    } else {
+      document.querySelector(".form-validation-message").innerHTML = "";
+    }
+
     let stepData = {
       familyMembers: Number(formData.get("familyMembers")),
       familyInCollege: Number(formData.get("familyInCollege")),
@@ -86,11 +94,18 @@ class Step3 extends React.Component {
                 </div>
               </div>
             </div>
+            <div className="grid-container">
+              <div className="grid-x grid-padding-x">
+                <div className="medium-12 cell form-validation-message">
+                  {/* Any form validation messages will output here */}
+                </div>
+              </div>
+            </div>
             <hr />
             <div className="grid-container">
               <div className="grid-x grid-padding-x">
               <div className="medium-3 cell medium-offset-1">
-                {/*<button className="button" onClick={() => {this.props.handlePreviousButtonClick(3)}}>Previous Screen</button>*/}
+                <button className="button" onClick={this.props.returnToStart}>Start Over</button>
                 </div>
                 <div className="medium-3 cell medium-offset-3">
                 <input type="submit" className="button" value="Save and Continue" />

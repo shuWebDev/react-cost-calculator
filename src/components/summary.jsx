@@ -94,7 +94,7 @@ class Summary extends React.Component {
         </section>
         <div className="row">
           {/*<button className="medium-2 columns medium-push-3 button" onClick={() => {return null;}}>Modify</button>*/}
-          <button className="medium-2 columns medium-pull-3 button" onClick={() => {document.getElementById("report-output").style.display = "block";}}>Generate Report</button>
+          <button className="medium-2 columns medium-push-4 button" onClick={() => {document.getElementById("report-output").style.display = "block";}}>Generate Report</button>
         </div>
         <section style={{"display": "none"}} id="report-output">
           <div className="row">

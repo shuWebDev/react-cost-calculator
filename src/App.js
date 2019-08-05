@@ -20,7 +20,7 @@ class App extends React.Component {
       tag: [],
       merit: [],
       // NOTE: userInputData: object to capture all the user input for the calculations
-      userInputData: {},
+      userInputData: {}
     };
   }
 
@@ -33,6 +33,13 @@ class App extends React.Component {
       merit: MeritData.default
     });
     return;
+  }
+
+  returnToStart = () => {
+    // NOTE: should retain previously entered values in state, but return user to first step
+    this.setState({
+      currentStep: 1
+    });
   }
 
   /*fetchAllData = () => {
@@ -413,7 +420,7 @@ class App extends React.Component {
       )
     } else {
       // User has clicked "accept", move control to the rest of app
-      return <AppCore dependency={this.state.dependency} generateReport={this.generateReport} saveStepData={this.saveStepData} currentStep={this.state.currentStep} handlePreviousButtonClick={this.handlePreviousButtonClick} changeHandler={this.changeHandler} userInputData={this.state.userInputData} />
+      return <AppCore returnToStart={this.returnToStart} dependency={this.state.dependency} generateReport={this.generateReport} saveStepData={this.saveStepData} currentStep={this.state.currentStep} handlePreviousButtonClick={this.handlePreviousButtonClick} changeHandler={this.changeHandler} userInputData={this.state.userInputData} />
     }
   }
 }

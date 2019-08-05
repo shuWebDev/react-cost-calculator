@@ -55,7 +55,7 @@ class Step2 extends React.Component {
             <div className="grid-container">
               <div className="grid-x grid-padding-x">
               <div className="medium-3 cell medium-offset-1">
-                {/*<button className="button" onClick={() => {this.props.handlePreviousButtonClick(2)}}>Previous Screen</button>*/}
+                <button className="button" onClick={this.props.returnToStart}>Start Over</button>
                 </div>
                 <div className="medium-3 cell medium-offset-3">
                   <input type="submit" className="button" value="Save and Continue" />
