@@ -14,7 +14,7 @@ class AppCore extends React.Component {
 
       case 3: return <Step3 saveStepData={this.props.saveStepData} dependency={this.props.dependency} returnToStart={this.props.returnToStart} />;
 
-      case 4: return <Summary generateReport={this.props.generateReport} userInputData={this.props.userInputData} />;
+      case 4: return <Summary generateReport={this.props.generateReport} userInputData={this.props.userInputData} calculatedEFC={this.props.calculatedEFC} returnToStart={this.props.returnToStart} />;
 
       default: return null; 
     } 

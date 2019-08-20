@@ -115,10 +115,22 @@ class Summary extends React.Component {
                 <em>In addition to direct costs, you should plan to cover any additional indirect costs. Here are some approximate costs you should be aware of:</em> 
               </ul>
               <ul>
-                <li>Books and Supplies: ${this.state.report.POA.booksSupplies.toFixed(2)}</li>
-                <li>Other Expenses: ${this.state.report.POA.otherExpenses.toFixed(2)}</li>
+                <li>Books and Supplies: $1000</li>
+                <li>Other Expenses: $2200</li>
                 <li>Room and board (off-campus): $6000.00</li>
               </ul>
+            </div>
+          </div>
+          <div className="row">
+            <div className="medium-12 columns">
+              <p>Please Note: The estimates above apply to full-time, first-time degree/certificate-seeking undergraduate students only. This estimate is based on an expected family contribution (EFC) of <strong>${this.props.calculatedEFC}</strong>. Your actual EFC will be determined each year by filing the FAFSA.<br />
+              These estimates do not represent a final determination, or actual award, of financial assistance or a final net price; they are only estimates based on price of attendance and financial aid provided to students in 2015-16. Price of attendance and financial aid availability change year to year. These estimates shall not be binding on the Secretary of Education, the institution of higher education, or the State. <br />
+              Not all students receive financial aid. In 2015-16, 92% of our full-time students enrolling for college for the first time received grant/scholarship aid. Students may also be eligible for student loans and work-study. Students must complete the Free Application for Federal Student Aid (FAFSA) in order to determine their eligibility for Federal financial aid that includes Federal grant, loan, or work-study assistance. For more information on applying for Federal student aid, go to http://www.fafsa.ed.gov/</p>
+            </div>
+          </div>
+          <div className="row">
+            <div className="medium-2 columns medium-push-4">
+              <button className="button" onClick={this.props.returnToStart}>Start Over</button>
             </div>
           </div>
         </section>

@@ -12,6 +12,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
+      calculatedEFC: 0,
       disclaimerAccepted: false,
       currentStep: 0,
       efc: {},
@@ -38,7 +39,9 @@ class App extends React.Component {
   returnToStart = () => {
     // NOTE: should retain previously entered values in state, but return user to first step
     this.setState({
-      currentStep: 1
+      currentStep: 1,
+      userInputData: {},
+      calculatedEFC: 0
     });
   }
 
@@ -143,7 +146,6 @@ class App extends React.Component {
     // NOTE get dependency status of user
     if(this.determineDependency() === true) {
       // NOTE: user is a dependent
-      console.log("user is dependent");
       for(let i=0; i<this.state.efc.efcDependent.length; i++) {
         for(let j=0; j<this.state.efc.efcDependent[i].length; j++) {
           if(this.state.efc.efcDependent[i][j].numberInCollege === this.state.userInputData.familyInCollege) {
@@ -178,7 +180,7 @@ class App extends React.Component {
           for(let j=0; j<this.state.efc.efcNotDependentAndNoDependent[i].length; j++) {
             if(this.state.efc.efcNotDependentAndNoDependent[i][j].numberInCollege === this.state.userInputData.familyInCollege) {
               if(this.state.efc.efcNotDependentAndNoDependent[i][j].numberInFamily === this.state.userInputData.familyMembers) {
-                console.log(`FOUND: ${this.state.efc.efcNotDependentAndNoDependent[i][j].incomeRanges[this.state.userInputData.householdIncome]}`);
+                //console.log(`FOUND: ${this.state.efc.efcNotDependentAndNoDependent[i][j].incomeRanges[this.state.userInputData.householdIncome]}`);
                 efc = this.state.efc.efcNotDependentAndNoDependent[i][j].incomeRanges[this.state.userInputData.householdIncome];
                 break; // NOTE: break out of the loop, we found the figure we need
               }
@@ -284,28 +286,46 @@ class App extends React.Component {
           if(needTestMode === "act") {
             if((actScore <= ACTrange.lower)) {
               calculatedNeedsEFC = needsData[i][2];
+              this.setState({
+                calculatedEFC: calculatedNeedsEFC
+              });
               return calculatedNeedsEFC;
             }
             if((actScore > ACTrange.lower) && (actScore < ACTrange.upper)) {
               calculatedNeedsEFC = needsData[i][3];
+              this.setState({
+                calculatedEFC: calculatedNeedsEFC
+              });
               return calculatedNeedsEFC;
             }
             if((actScore >= ACTrange.upper)) {
               calculatedNeedsEFC = needsData[i][4];
+              this.setState({
+                calculatedEFC: calculatedNeedsEFC
+              });
               return calculatedNeedsEFC;
             }
           } else {
             // NOTE: user provided SAT score so we're using that instead of ACT to determine
             if((satScore <= SATrange.lower)) {
               calculatedNeedsEFC = needsData[i][2];
+              this.setState({
+                calculatedEFC: calculatedNeedsEFC
+              });
               return calculatedNeedsEFC;
             }
             if((satScore > SATrange.lower) && (satScore < SATrange.upper)) {
               calculatedNeedsEFC = needsData[i][3];
+              this.setState({
+                calculatedEFC: calculatedNeedsEFC
+              });
               return calculatedNeedsEFC;
             }
             if((satScore >= SATrange.upper)) {
               calculatedNeedsEFC = needsData[i][4];
+              this.setState({
+                calculatedEFC: calculatedNeedsEFC
+              });
               return calculatedNeedsEFC;
             }
           }
@@ -316,14 +336,23 @@ class App extends React.Component {
           if((efc >= needsData[i][0]) && (efc <= needsData[i][1])) {
             if(GPA <= 2.999) {
               calculatedNeedsEFC = needsData[i][2];
+              this.setState({
+                calculatedEFC: calculatedNeedsEFC
+              });
               return calculatedNeedsEFC;
             }
             if((GPA >= 3.0) && (GPA < 3.499)) {
               calculatedNeedsEFC = needsData[i][3];
+              this.setState({
+                calculatedEFC: calculatedNeedsEFC
+              });
               return calculatedNeedsEFC;
             }
             if(GPA >= 3.5) {
               calculatedNeedsEFC = needsData[i][4];
+              this.setState({
+                calculatedEFC: calculatedNeedsEFC
+              });
               return calculatedNeedsEFC;
             }
           }
@@ -347,14 +376,14 @@ class App extends React.Component {
       if(meritTestMode === "sat") {
         satScore = this.state.userInputData.scores.erwsat + this.state.userInputData.scores.mathsat;
         meritData = this.state.merit.meritsat;
-        console.log(`MERIT SAT Score: ${satScore}`);
+        //console.log(`MERIT SAT Score: ${satScore}`);
       } else {
         // NOTE: use ACT instead of SAT
         actScore = this.state.userInputData.scores.act;
         meritData = this.state.merit.meritact;
-        console.log(`MERIT ACT Score: ${actScore}`);
+        //console.log(`MERIT ACT Score: ${actScore}`);
       }
-      console.log(`MERIT GPA: ${GPA}`);
+      //console.log(`MERIT GPA: ${GPA}`);
       // NOTE: based on which test score we have, find the row of data we need
       // NOTE: first compare test score to range of [i][0]-[i][1], then compare GPA to range of [i][2]-[i][3] and if both check out, [i][4] is your merit value
       if(meritTestMode === "sat") {
@@ -404,7 +433,7 @@ class App extends React.Component {
         ...this.state.userInputData,
         ...data
       }
-    }, () => { console.log(`step data saved.`)});
+    }, () => { /*console.log(`step data saved.`)*/});
   }
 
   componentDidUpdate() {
@@ -420,7 +449,7 @@ class App extends React.Component {
       )
     } else {
       // User has clicked "accept", move control to the rest of app
-      return <AppCore returnToStart={this.returnToStart} dependency={this.state.dependency} generateReport={this.generateReport} saveStepData={this.saveStepData} currentStep={this.state.currentStep} handlePreviousButtonClick={this.handlePreviousButtonClick} changeHandler={this.changeHandler} userInputData={this.state.userInputData} />
+      return <AppCore returnToStart={this.returnToStart} dependency={this.state.dependency} generateReport={this.generateReport} saveStepData={this.saveStepData} currentStep={this.state.currentStep} handlePreviousButtonClick={this.handlePreviousButtonClick} changeHandler={this.changeHandler} userInputData={this.state.userInputData} calculatedEFC={this.state.calculatedEFC} />
     }
   }
 }

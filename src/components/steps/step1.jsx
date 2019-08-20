@@ -89,9 +89,9 @@ class Step1 extends React.Component {
                       <strong>Living Arrangement</strong><br />
                       <p>Where do you plan to live while attending this institution?</p>
                       <fieldset>
-                        <input type="radio" name="living" value="0" id="onCampus" ref={this.input} defaultChecked /><label htmlFor="onCampus">On-campus (in a residence hall, dormitory, or on-campus apartment)</label><br />
-                        <input type="radio" name="living" value="2" id="parentsOrFamily" ref={this.input} /><label htmlFor="parentsOrFamily">Living with my parents or other family members</label><br />
-                        <input type="radio" name="living" value="1" id="aloneOrRoommate" ref={this.input} /><label htmlFor="aloneOrRoommate">Living on my own or with a roommate</label>
+                        <label htmlFor="onCampus"><input type="radio" name="living" value="0" id="onCampus" ref={this.input} defaultChecked />On-campus (in a residence hall, dormitory, or on-campus apartment)</label><br />
+                        <label htmlFor="parentsOrFamily"><input type="radio" name="living" value="2" id="parentsOrFamily" ref={this.input} />Living with my parents or other family members</label><br />
+                        <label htmlFor="aloneOrRoommate"><input type="radio" name="living" value="1" id="aloneOrRoommate" ref={this.input} />Living on my own or with a roommate</label>
                       </fieldset>
                     </label>
                   </div>
