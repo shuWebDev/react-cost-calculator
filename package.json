@@ -129,5 +129,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "eslint-utils": "1.4.1"
   }
 }
