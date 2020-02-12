@@ -45,6 +45,7 @@ class App extends React.Component {
     });
   }
 
+  // NOTE: an alternative way of pulling in all the data if the .json files are not bundled within the app at build time, but are hosted separately
   /*fetchAllData = () => {
     try {
       Promise.all([
@@ -449,6 +450,7 @@ class App extends React.Component {
       )
     } else {
       // User has clicked "accept", move control to the rest of app
+      
       return <AppCore returnToStart={this.returnToStart} dependency={this.state.dependency} generateReport={this.generateReport} saveStepData={this.saveStepData} currentStep={this.state.currentStep} handlePreviousButtonClick={this.handlePreviousButtonClick} changeHandler={this.changeHandler} userInputData={this.state.userInputData} calculatedEFC={this.state.calculatedEFC} />
     }
   }
