@@ -93,7 +93,8 @@ class App extends React.Component {
   generateReport = () => {
     let EFCValue = this.getEFC();
     // NOTE: Tuition aid grant value is depenednt on EFC value
-    let TAGValue = this.getTAG(EFCValue);
+    // NOTE: TAG does not apply if student is not NJ resident
+    let TAGValue = (this.state.userInputData.state === "New Jersey")? this.getTAG(EFCValue) : 0;
     let POAValue = this.getPOA();
     let PellValue = this.calculatePell(EFCValue);
     let NeedsBasedEFC = this.calculateNeedsBasedEFC(EFCValue);
