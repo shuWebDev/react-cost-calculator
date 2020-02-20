@@ -46,7 +46,7 @@ export function determineEFC(data) {
         if(data.efc.efcDependent[i][j].numberInCollege === data.familyInCollege) {
           if(data.efc.efcDependent[i][j].numberInFamily === data.familyMembers) {
             // NOTE: we found the value we need, break out of the loop and return
-            efcResult = data.efc.efcDependent[i][j].incomeRanges[data.householdIncome];
+            efcResult = data.efc.efcDependent[i][j].incomeRanges[data.householdIncome-1];
             break;
           }
         }
@@ -58,10 +58,10 @@ export function determineEFC(data) {
       // NOTE: user has dependent children
       for(let i=0; i<data.efc.efcNotDependentButHasDependent.length; i++) {
         for(let j=0; j<data.efc.efcNotDependentButHasDependent[i].length; j++) {
-          if(data.efc.efcNotDependentButHasDependent[i][j].numberInCollege === data.numberInCollege) {
+          if(data.efc.efcNotDependentButHasDependent[i][j].numberInCollege === data.familyInCollege) {
             if(data.efc.efcNotDependentButHasDependent[i][j].numberInFamily === data.familyMembers) {
               // NOTE: we found the value we need, break out of the loop and return
-              efcResult = data.efc.efcNotDependentButHasDependent[i][j].incomeRanges[data.householdIncome];
+              efcResult = data.efc.efcNotDependentButHasDependent[i][j].incomeRanges[data.householdIncome-1];
               break;
             }
           }
@@ -71,10 +71,10 @@ export function determineEFC(data) {
       // NOTE: user is NOT a dependent, and HAS NO dependents
       for(let i=0; i<data.efc.efcNotDependentAndNoDependent.length; i++) {
         for(let j=0; j<data.efc.efcNotDependentAndNoDependent[i].length; j++) {
-          if(data.efc.efcNotDependentAndNoDependent[i][j].numberInCollege === data.numberInCollege) {
+          if(data.efc.efcNotDependentAndNoDependent[i][j].numberInCollege === data.familyInCollege) {
             if (data.efc.efcNotDependentAndNoDependent[i][j].numberInFamily === data.familyMembers) {
               // NOTE: we found the value we need, break out of the loop and return
-              efcResult = data.efc.efcNotDependentAndNoDependent[i][j].incomeRanges[data.householdIncome];
+              efcResult = data.efc.efcNotDependentAndNoDependent[i][j].incomeRanges[data.householdIncome-1];
               break;
             }
           }
@@ -92,7 +92,17 @@ export function determineEFC(data) {
 // accepts: the value of the user's Expected Family Contribution
 // 
 // returns: the TAG value from lookup based on calculations
-export function determineTAG(efcValue) {
+export function determineTAG(efcValue, TAGData) {
+  // NOTE: Initialize our return variable
   let TAGResult = 0;
+
+  for(let i=0; i<TAGData.length; i++) {
+    if((efcValue >= TAGData[i][0]) && (efcValue <= TAGData[i][1])) {
+      // NOTE: we found the row and our TAG value, break out and return
+      TAGResult = TAGData[i][2];
+      break;
+    }
+  }
+  console.log(`TAG: ${TAGResult}`);
   return TAGResult;
 }

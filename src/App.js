@@ -99,7 +99,7 @@ class App extends React.Component {
 
     // NOTE: Tuition aid grant value is depenednt on EFC value
     // NOTE: TAG does not apply if student is not NJ resident
-    let TAGValue = (this.state.userInputData.state === "New Jersey")? LogicModule.determineTAG(EFCValue) : 0;
+    let TAGValue = (this.state.userInputData.state === "New Jersey")? LogicModule.determineTAG(EFCValue, this.state.tag) : 0;
     let POAValue = this.getPOA();
     let PellValue = this.calculatePell(EFCValue);
     let NeedsBasedEFC = this.calculateNeedsBasedEFC(EFCValue);
@@ -130,74 +130,6 @@ class App extends React.Component {
       }
     }
     return calculatedPell;
-  }
-
-  // NOTE: compute TAG/Tuition Aid Grant value
-  getTAG = (efc) => {
-    let tag = this.state.tag; // NOTE: values pulled in from data file
-    let calculatedTAG = 0;
-
-    for(let i=0; i<tag.length; i++) {
-      if((efc >= tag[i][0]) && efc <= tag[i][1]) {
-        calculatedTAG = tag[i][2];
-        break;
-      }
-    }
-    return calculatedTAG;
-  }
-
-  // NOTE: retrieves the Expected Family Contribution figure from the static data based on user inputs
-  getEFC = () => {
-    let efc = 0;
-    
-    // NOTE get dependency status of user
-    if(this.determineDependency() === true) {
-      // NOTE: user is a dependent
-      for(let i=0; i<this.state.efc.efcDependent.length; i++) {
-        for(let j=0; j<this.state.efc.efcDependent[i].length; j++) {
-          if(this.state.efc.efcDependent[i][j].numberInCollege === this.state.userInputData.familyInCollege) {
-            if(this.state.efc.efcDependent[i][j].numberInFamily === this.state.userInputData.familyMembers) {
-              //console.log(`FOUND: ${this.state.efc.efcDependent[i][j].incomeRanges[this.state.userInputData.householdIncome]}`);
-              efc = this.state.efc.efcDependent[i][j].incomeRanges[this.state.userInputData.householdIncome];
-              break; // NOTE: break out of loop, we found the figure we need
-            }
-          }
-        }
-      }
-    } else {
-      // NOTE: user is not a dependent, determine if they have children as dependents
-      if(this.state.userInputData.childSupport === "yes") {
-        // NOTE: user has no dependent children
-        //console.log("user is NOT dependent, but HAS dependent(s)");
-        for(let i=0; i<this.state.efc.efcNotDependentButHasDependent.length; i++) {
-          for(let j=0; j<this.state.efc.efcNotDependentButHasDependent[i].length; j++) {
-            if(this.state.efc.efcNotDependentButHasDependent[i][j].numberInCollege === this.state.userInputData.familyInCollege) {
-              if(this.state.efc.efcNotDependentButHasDependent[i][j].numberInFamily === this.state.userInputData.familyMembers) {
-                //console.log(`FOUND: ${this.state.efc.efcNotDependentButHasDependent[i][j].incomeRanges[this.state.userInputData.householdIncome]}`);
-                efc = this.state.efc.efcNotDependentButHasDependent[i][j].incomeRanges[this.state.userInputData.householdIncome];
-                break; // NOTE: break out of the loop, we found the figure we need
-              }
-            }
-          } 
-        } 
-      } else {
-        //console.log("user is NOT dependent, and HAS NO dependents");
-        // NOTE: user is not a dependent and has no dependent children
-        for(let i=0; i<this.state.efc.efcNotDependentAndNoDependent.length; i++) {
-          for(let j=0; j<this.state.efc.efcNotDependentAndNoDependent[i].length; j++) {
-            if(this.state.efc.efcNotDependentAndNoDependent[i][j].numberInCollege === this.state.userInputData.familyInCollege) {
-              if(this.state.efc.efcNotDependentAndNoDependent[i][j].numberInFamily === this.state.userInputData.familyMembers) {
-                //console.log(`FOUND: ${this.state.efc.efcNotDependentAndNoDependent[i][j].incomeRanges[this.state.userInputData.householdIncome]}`);
-                efc = this.state.efc.efcNotDependentAndNoDependent[i][j].incomeRanges[this.state.userInputData.householdIncome];
-                break; // NOTE: break out of the loop, we found the figure we need
-              }
-            }
-          }
-        }
-      }
-    }
-   // NOTE: return the value for EFC that we found
-    return efc;
   }
 
   // NOTE: calculate price of admission cost
