@@ -106,3 +106,55 @@ export function determineTAG(efcValue, TAGData) {
   console.log(`TAG: ${TAGResult}`);
   return TAGResult;
 }
+
+// NOTE: function determinePOA
+//
+// accepts: object containing 
+//          -- the POA data from state
+//          -- user's living status (0, 1, 2)
+//          -- residency (0 for New Jersey, 1 for other)
+// 
+// returns: Price of Admission value
+
+export function determinePOA(data) {
+  // NOTE: initialize return variable
+  let POAResult = {
+    totalCost: 0,
+    tuitionAndFees: 0,
+    booksSupplies: 0,
+    roomAndBoard: 0,
+    otherExpenses: 0
+  };
+
+  let poaIndexNumber;
+  let rs;
+  
+  // NOTE: Is user NJ resident or out of state?
+  if(data.residencyState === "New Jersey") {
+    rs = 0;
+  } else {
+    rs = 1;
+  }
+
+  // NOTE: will user be living on campus (regardless of current residency), off campus (current NJ resident) or off campus (not-current-NJ resident)
+  if(data.livingStatus === 0) {
+    poaIndexNumber = 0; // NOTE: first element in POA array
+  } else {
+    if(rs === 0) {
+      poaIndexNumber = 1;
+    } else {
+      poaIndexNumber = 2;
+    }
+  }
+
+  // NOTE: pull out the POA values we need to show
+  POAResult = {
+    totalCost: data.poa.poatotaladmissioncost[poaIndexNumber],
+    tuitionAndFees: data.poa.poatuitionandfees[poaIndexNumber],
+    booksSupplies: data.poa.poabookssupplies[poaIndexNumber],
+    roomAndboard: data.poa.poaroomboard[poaIndexNumber],
+    otherExpenses: data.poa.poaotherexpenses[poaIndexNumber]
+  };
+
+  return POAResult;
+}

@@ -100,7 +100,14 @@ class App extends React.Component {
     // NOTE: Tuition aid grant value is depenednt on EFC value
     // NOTE: TAG does not apply if student is not NJ resident
     let TAGValue = (this.state.userInputData.state === "New Jersey")? LogicModule.determineTAG(EFCValue, this.state.tag) : 0;
-    let POAValue = this.getPOA();
+
+    const objPOAData = {
+      poa: this.state.poa,
+      livingStatus: this.state.userInputData.livingStatus,
+      residencyState: this.state.userInputData.residencyState,
+
+    };
+    let POAValue = LogicModule.determinePOA(objPOAData);
     let PellValue = this.calculatePell(EFCValue);
     let NeedsBasedEFC = this.calculateNeedsBasedEFC(EFCValue);
     let Merit = this.calculateMerit();
@@ -133,38 +140,38 @@ class App extends React.Component {
   }
 
   // NOTE: calculate price of admission cost
-  getPOA = () => {
-    // NOTE: 0 = on campus, 1 = living on own, 2 = with family
-    let livingStatus = this.state.userInputData.living; 
-    let residencyState, poaIndexNumber;
-    let calculatedPOAValues = {};
+  // getPOA = () => {
+  //   // NOTE: 0 = on campus, 1 = living on own, 2 = with family
+  //   let livingStatus = this.state.userInputData.living; 
+  //   let residencyState, poaIndexNumber;
+  //   let calculatedPOAValues = {};
 
-    if(this.state.userInputData.state === "New Jersey") {
-      residencyState = 0;
-    } else {
-      residencyState = 1;
-    }
+  //   if(this.state.userInputData.state === "New Jersey") {
+  //     residencyState = 0;
+  //   } else {
+  //     residencyState = 1;
+  //   }
 
-    // NOTE: determine whether user is living on campus (NJ resident OR not), or off campus/NJ resident, OR off campus non NJ resident
-    if(livingStatus === 0) {
-      poaIndexNumber = 0; // the first element in the POA arrays 
-    } else {
-      if(residencyState === 0) {
-        poaIndexNumber = 1;
-      } else {
-        poaIndexNumber = 2;
-      }
-    }
-    //NOTE pull out the POA values we need to show
-    calculatedPOAValues = {
-      totalCost: this.state.poa.poatotaladmissioncost[poaIndexNumber],
-      tuitionAndFees: this.state.poa.poatuitionfees[poaIndexNumber],
-      booksSupplies: this.state.poa.poabookssupplies[poaIndexNumber],
-      roomAndBoard: this.state.poa.poaroomboard[poaIndexNumber],
-      otherExpenses: this.state.poa.poaotherexpenses[poaIndexNumber]
-    };
-    return calculatedPOAValues;
-  }
+  //   // NOTE: determine whether user is living on campus (NJ resident OR not), or off campus/NJ resident, OR off campus non NJ resident
+  //   if(livingStatus === 0) {
+  //     poaIndexNumber = 0; // the first element in the POA arrays 
+  //   } else {
+  //     if(residencyState === 0) {
+  //       poaIndexNumber = 1;
+  //     } else {
+  //       poaIndexNumber = 2;
+  //     }
+  //   }
+  //   //NOTE pull out the POA values we need to show
+  //   calculatedPOAValues = {
+  //     totalCost: this.state.poa.poatotaladmissioncost[poaIndexNumber],
+  //     tuitionAndFees: this.state.poa.poatuitionfees[poaIndexNumber],
+  //     booksSupplies: this.state.poa.poabookssupplies[poaIndexNumber],
+  //     roomAndBoard: this.state.poa.poaroomboard[poaIndexNumber],
+  //     otherExpenses: this.state.poa.poaotherexpenses[poaIndexNumber]
+  //   };
+  //   return calculatedPOAValues;
+  // }
 
   calculateNeedsBasedEFC = (efc) => {
     let SATrange = {
