@@ -1,11 +1,16 @@
 import React from 'react';
+// NOTE: Components
 import Intro from './components/intro';
 import AppCore from './components/appcore';
+// NOTE: data files
 import * as EFCData from "./data/efc.json";
 import * as POAData from "./data/poa.json";
 import * as PellData from "./data/pell.json";
 import * as TAGData from "./data/tag.json";
 import * as MeritData from "./data/merit.json";
+// NOTE: Functionality
+import * as LogicModule from "./logic/logicmodule";
+
 
 class App extends React.Component {
   constructor(props) {
@@ -26,6 +31,7 @@ class App extends React.Component {
   }
 
   loadData = () => {
+    // NOTE: when importing a JSON file as we are, "default" is where the data is since it's considered the "default export" from the module
     this.setState({
       efc: EFCData.default,
       poa: POAData.default,
@@ -68,33 +74,32 @@ class App extends React.Component {
     }
   }*/
 
-  componentWillMount() {
+  componentDidMount() {
     this.loadData();
-  }
-
-  determineDependency = () => {
-    let dependent = false;
-    // NOTE: check if user's age < 24 
-    if(this.state.userInputData.age < 24) {
-      dependent = true;
-    }
-    // NOTE: check if user is married
-    if(this.state.userInputData.marital === "yes") {
-      dependent = false;
-    }
-    // NOTE: check if user has children
-    if(this.state.userInputData.childSupport === "yes") {
-      dependent = false;
-    }
-    return dependent;
   }
 
   // NOTE: generate the calculated report
   generateReport = () => {
-    let EFCValue = this.getEFC();
+    // NOTE: package of values the EFC function needs to do its
+    // calculations
+    const objEFCData = {
+      childSupport: this.state.userInputData.childSupport,
+      dependent: LogicModule.determineDependency({
+        age: this.state.userInputData.age,
+        marital: this.state.userInputData.marital,
+        childSupport: this.state.userInputData.childSupport
+      }),
+      efc: this.state.efc,
+      familyMembers: this.state.userInputData.familyMembers,
+      familyInCollege: this.state.userInputData.familyInCollege,
+      householdIncome: this.state.userInputData.familyMembers,
+    };
+
+    let EFCValue = LogicModule.determineEFC(objEFCData);
+
     // NOTE: Tuition aid grant value is depenednt on EFC value
     // NOTE: TAG does not apply if student is not NJ resident
-    let TAGValue = (this.state.userInputData.state === "New Jersey")? this.getTAG(EFCValue) : 0;
+    let TAGValue = (this.state.userInputData.state === "New Jersey")? LogicModule.determineTAG(EFCValue) : 0;
     let POAValue = this.getPOA();
     let PellValue = this.calculatePell(EFCValue);
     let NeedsBasedEFC = this.calculateNeedsBasedEFC(EFCValue);
