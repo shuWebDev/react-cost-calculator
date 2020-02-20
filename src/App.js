@@ -92,7 +92,7 @@ class App extends React.Component {
       efc: this.state.efc,
       familyMembers: this.state.userInputData.familyMembers,
       familyInCollege: this.state.userInputData.familyInCollege,
-      householdIncome: this.state.userInputData.familyMembers,
+      householdIncome: this.state.userInputData.householdIncome,
     };
 
     let EFCValue = LogicModule.determineEFC(objEFCData);

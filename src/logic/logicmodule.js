@@ -46,7 +46,7 @@ export function determineEFC(data) {
         if(data.efc.efcDependent[i][j].numberInCollege === data.familyInCollege) {
           if(data.efc.efcDependent[i][j].numberInFamily === data.familyMembers) {
             // NOTE: we found the value we need, break out of the loop and return
-            efcResult = data.efc.efcDependent[i][j].incomeRanges[data.householdIncome-1];
+            efcResult = data.efc.efcDependent[i][j].incomeRanges[data.householdIncome];
             break;
           }
         }
@@ -61,7 +61,7 @@ export function determineEFC(data) {
           if(data.efc.efcNotDependentButHasDependent[i][j].numberInCollege === data.familyInCollege) {
             if(data.efc.efcNotDependentButHasDependent[i][j].numberInFamily === data.familyMembers) {
               // NOTE: we found the value we need, break out of the loop and return
-              efcResult = data.efc.efcNotDependentButHasDependent[i][j].incomeRanges[data.householdIncome-1];
+              efcResult = data.efc.efcNotDependentButHasDependent[i][j].incomeRanges[data.householdIncome];
               break;
             }
           }
@@ -74,7 +74,7 @@ export function determineEFC(data) {
           if(data.efc.efcNotDependentAndNoDependent[i][j].numberInCollege === data.familyInCollege) {
             if (data.efc.efcNotDependentAndNoDependent[i][j].numberInFamily === data.familyMembers) {
               // NOTE: we found the value we need, break out of the loop and return
-              efcResult = data.efc.efcNotDependentAndNoDependent[i][j].incomeRanges[data.householdIncome-1];
+              efcResult = data.efc.efcNotDependentAndNoDependent[i][j].incomeRanges[data.householdIncome];
               break;
             }
           }
