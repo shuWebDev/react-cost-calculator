@@ -123,8 +123,11 @@ export function determinePOA(data) {
     tuitionAndFees: 0,
     booksSupplies: 0,
     roomAndBoard: 0,
-    otherExpenses: 0
+    otherExpenses: 0,
+    total: 0
   };
+
+  let poaTotal = 0;
 
   // NOTE: Is user NJ resident or out of state?
   let rs = (data.residencyState === "New Jersey")? 0 : 1; 
@@ -140,11 +143,30 @@ export function determinePOA(data) {
   // NOTE: pull out the POA values we need to show
   POAResult = {
     totalCost: data.poa.poatotaladmissioncost[poaIndexNumber],
-    tuitionAndFees: data.poa.poatuitionandfees[poaIndexNumber],
+    tuitionAndFees: data.poa.poatuitionfees[poaIndexNumber],
     booksSupplies: data.poa.poabookssupplies[poaIndexNumber],
-    roomAndboard: data.poa.poaroomboard[poaIndexNumber],
+    roomAndBoard: data.poa.poaroomboard[poaIndexNumber],
     otherExpenses: data.poa.poaotherexpenses[poaIndexNumber]
   };
+  console.log(POAResult);
 
   return POAResult;
+}
+
+// NOTE: function determinePell
+//
+// accepts: object containing 
+//          - a copy of the Pell data in app state
+//          - the calculated EFC value for the user 
+// 
+// returns: the Pell Grant amount according to data
+
+export function determinePell(data) {
+  let pellResult;
+
+  for(let i=0; i<data.pell.length; i++) {
+    pellResult = ((data.efc >= data.pell[i][0]) && (data.efc <= data.pell[i][1]))? data.pell[i][2] : 0;
+  }
+
+  return pellResult;
 }

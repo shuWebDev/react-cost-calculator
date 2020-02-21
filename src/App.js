@@ -101,13 +101,21 @@ class App extends React.Component {
     // NOTE: TAG does not apply if student is not NJ resident
     let TAGValue = (this.state.userInputData.state === "New Jersey")? LogicModule.determineTAG(EFCValue, this.state.tag) : 0;
 
+    // NOTE: Calculate price of attendance
     const objPOAData = {
       poa: this.state.poa,
       livingStatus: this.state.userInputData.livingStatus,
       residencyState: this.state.userInputData.residencyState,
     };
     let POAValue = LogicModule.determinePOA(objPOAData);
-    let PellValue = this.calculatePell(EFCValue);
+    
+    // NOTE: calculate Pell Grant 
+    const objPellData = {
+      efc: EFCValue,
+      pell: this.state.pell
+    };
+    let PellValue = LogicModule.determinePell(objPellData);
+    
     let NeedsBasedEFC = this.calculateNeedsBasedEFC(EFCValue);
     let Merit = this.calculateMerit();
     let totalGrant = TAGValue + PellValue + NeedsBasedEFC + Merit;
@@ -122,20 +130,6 @@ class App extends React.Component {
       Total: totalGrant
     };
     return calculationReport;
-  }
-
-  // NOTE: calculate Pell grant amount
-  calculatePell = (efc) => {
-    let pell = this.state.pell; // NOTE: values from pell.json
-    let calculatedPell = 0;
-
-    for(let i=0; i<pell.length; i++) {
-      if((efc >= pell[i][0]) && efc <= pell[i][1]) {
-        calculatedPell = pell[i][2];
-        break;
-      }
-    }
-    return calculatedPell;
   }
 
   calculateNeedsBasedEFC = (efc) => {
