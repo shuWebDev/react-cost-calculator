@@ -105,7 +105,6 @@ class App extends React.Component {
       poa: this.state.poa,
       livingStatus: this.state.userInputData.livingStatus,
       residencyState: this.state.userInputData.residencyState,
-
     };
     let POAValue = LogicModule.determinePOA(objPOAData);
     let PellValue = this.calculatePell(EFCValue);
@@ -138,40 +137,6 @@ class App extends React.Component {
     }
     return calculatedPell;
   }
-
-  // NOTE: calculate price of admission cost
-  // getPOA = () => {
-  //   // NOTE: 0 = on campus, 1 = living on own, 2 = with family
-  //   let livingStatus = this.state.userInputData.living; 
-  //   let residencyState, poaIndexNumber;
-  //   let calculatedPOAValues = {};
-
-  //   if(this.state.userInputData.state === "New Jersey") {
-  //     residencyState = 0;
-  //   } else {
-  //     residencyState = 1;
-  //   }
-
-  //   // NOTE: determine whether user is living on campus (NJ resident OR not), or off campus/NJ resident, OR off campus non NJ resident
-  //   if(livingStatus === 0) {
-  //     poaIndexNumber = 0; // the first element in the POA arrays 
-  //   } else {
-  //     if(residencyState === 0) {
-  //       poaIndexNumber = 1;
-  //     } else {
-  //       poaIndexNumber = 2;
-  //     }
-  //   }
-  //   //NOTE pull out the POA values we need to show
-  //   calculatedPOAValues = {
-  //     totalCost: this.state.poa.poatotaladmissioncost[poaIndexNumber],
-  //     tuitionAndFees: this.state.poa.poatuitionfees[poaIndexNumber],
-  //     booksSupplies: this.state.poa.poabookssupplies[poaIndexNumber],
-  //     roomAndBoard: this.state.poa.poaroomboard[poaIndexNumber],
-  //     otherExpenses: this.state.poa.poaotherexpenses[poaIndexNumber]
-  //   };
-  //   return calculatedPOAValues;
-  // }
 
   calculateNeedsBasedEFC = (efc) => {
     let SATrange = {

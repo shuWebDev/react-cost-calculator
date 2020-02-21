@@ -126,25 +126,15 @@ export function determinePOA(data) {
     otherExpenses: 0
   };
 
-  let poaIndexNumber;
-  let rs;
-  
   // NOTE: Is user NJ resident or out of state?
-  if(data.residencyState === "New Jersey") {
-    rs = 0;
-  } else {
-    rs = 1;
-  }
+  let rs = (data.residencyState === "New Jersey")? 0 : 1; 
 
   // NOTE: will user be living on campus (regardless of current residency), off campus (current NJ resident) or off campus (not-current-NJ resident)
+  let poaIndexNumber;
   if(data.livingStatus === 0) {
     poaIndexNumber = 0; // NOTE: first element in POA array
   } else {
-    if(rs === 0) {
-      poaIndexNumber = 1;
-    } else {
-      poaIndexNumber = 2;
-    }
+    poaIndexNumber = (rs === 0)? 1 : 2;
   }
 
   // NOTE: pull out the POA values we need to show
