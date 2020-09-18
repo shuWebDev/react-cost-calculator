@@ -371,49 +371,65 @@ class App extends React.Component {
     // NOTE: first determine if user is freshman/current HS student or tansfer
     if(this.state.userInputData.studentStatus === "highschool") {
       // NOTE: user is current HS/incoming freshman, now determine if we are going by SAT or ACT
-      let meritTestMode = (this.state.userInputData.scores.act) ? "act" : "sat";
-      let satScore = 0, actScore = 0;
+      console.log(Object.keys(this.state.userInputData.scores));
+      let useTestScores = (Object.keys(this.state.userInputData.scores).length)? true : false;
+      console.log(useTestScores);
+      //NOTE: We are using SAT/ACT test scores to calculate
+      if(useTestScores) {
+        let meritTestMode = (this.state.userInputData.scores.act) ? "act" : "sat";
+        let satScore = 0, actScore = 0;
       
-      // NOTE: get whichever score we need. 
-      if(meritTestMode === "sat") {
-        satScore = this.state.userInputData.scores.erwsat + this.state.userInputData.scores.mathsat;
-        meritData = this.state.merit.meritsat;
-        //console.log(`MERIT SAT Score: ${satScore}`);
-      } else {
-        // NOTE: use ACT instead of SAT
-        actScore = this.state.userInputData.scores.act;
-        meritData = this.state.merit.meritact;
-        //console.log(`MERIT ACT Score: ${actScore}`);
-      }
-      //console.log(`MERIT GPA: ${GPA}`);
-      // NOTE: based on which test score we have, find the row of data we need
-      // NOTE: first compare test score to range of [i][0]-[i][1], then compare GPA to range of [i][2]-[i][3] and if both check out, [i][4] is your merit value
-      if(meritTestMode === "sat") {
-        for(let i=0; i<meritData.length; i++) {
-          if((satScore >= meritData[i][0]) && (satScore <= meritData[i][1])) {
-            if((GPA >= meritData[i][2]) && (GPA <= meritData[i][3])) {
-              meritAwardValue = meritData[i][4];
-              return meritAwardValue;
+        // NOTE: get whichever score we need. 
+        if(meritTestMode === "sat") {
+          satScore = this.state.userInputData.scores.erwsat + this.state.userInputData.scores.mathsat;
+          meritData = this.state.merit.meritsat;
+          //console.log(`MERIT SAT Score: ${satScore}`);
+        } else {
+          // NOTE: use ACT instead of SAT
+          actScore = this.state.userInputData.scores.act;
+          meritData = this.state.merit.meritact;
+          //console.log(`MERIT ACT Score: ${actScore}`);
+        }
+        //console.log(`MERIT GPA: ${GPA}`);
+        // NOTE: based on which test score we have, find the row of data we need
+        // NOTE: first compare test score to range of [i][0]-[i][1], then compare GPA to range of [i][2]-[i][3] and if both check out, [i][4] is your merit value
+        if(meritTestMode === "sat") {
+          for(let i=0; i<meritData.length; i++) {
+            if((satScore >= meritData[i][0]) && (satScore <= meritData[i][1])) {
+              if((GPA >= meritData[i][2]) && (GPA <= meritData[i][3])) {
+                meritAwardValue = meritData[i][4];
+                return meritAwardValue;
+              }
+            }
+          }
+        } else {
+          // NOTE: we're using ACT to determine instead
+          for(let i=0; i<meritData.length; i++) {
+            if((actScore >= meritData[i][0]) && (actScore <= meritData[i][1])) {
+              if((GPA >= meritData[i][2]) && (GPA <= meritData[i][3])) {
+                meritAwardValue = meritData[i][4];
+                return meritAwardValue;
+              }
             }
           }
         }
       } else {
-        // NOTE: we're using ACT to determine instead
+        // NOTE: user is transfer student, go by GPA
+        meritData = this.state.merit.testoptional;
         for(let i=0; i<meritData.length; i++) {
-          if((actScore >= meritData[i][0]) && (actScore <= meritData[i][1])) {
-            if((GPA >= meritData[i][2]) && (GPA <= meritData[i][3])) {
-              meritAwardValue = meritData[i][4];
-              return meritAwardValue;
-            }
+          if((GPA >= meritData[i][0]) && (GPA <= meritData[i][1])) {
+            meritAwardValue = meritData[i][2];
+            return meritAwardValue;
           }
         }
       }
     } else {
-      // NOTE: user is transfer student, go by GPA
-      meritData = this.state.merit.merittransfer;
+      // NOTE: we are not calculating based on test scores, use "Test Optional GPA calculation"
+      meritData = this.state.merit.testoptional;
       for(let i=0; i<meritData.length; i++) {
         if((GPA >= meritData[i][0]) && (GPA <= meritData[i][1])) {
           meritAwardValue = meritData[i][2];
+          console.log(meritAwardValue);
           return meritAwardValue;
         }
       }
