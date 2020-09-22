@@ -6,6 +6,10 @@ import Summary from './summary';
 
 class AppCore extends React.Component {
   
+  componentDidUpdate = () => {
+    window.scrollTo(0,0);
+  }
+
   render() {
     switch(this.props.currentStep) {
       case 1: return <Step1 saveStepData={this.props.saveStepData} />; 
