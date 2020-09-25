@@ -97,7 +97,7 @@ class App extends React.Component {
     let TAGValue = (this.state.userInputData.state === "New Jersey")? this.getTAG(EFCValue) : 0;
     let POAValue = this.getPOA();
     let PellValue = this.calculatePell(EFCValue);
-    let NeedsBasedEFC = this.calculateNeedsBasedEFC(EFCValue);
+    let NeedsBasedEFC = this.calculateNeedsBasedEFC(EFCValue, this.state.userInputData.currentGPA);
     let Merit = this.calculateMerit();
     let totalGrant = TAGValue + PellValue + NeedsBasedEFC + Merit;
     
@@ -131,7 +131,7 @@ class App extends React.Component {
   getTAG = (efc) => {
     let tag = this.state.tag; // NOTE: values pulled in from data file
     let calculatedTAG = 0;
-
+    console.log(`[TAG]: EFC=${efc}`);
     for(let i=0; i<tag.length; i++) {
       if((efc >= tag[i][0]) && efc <= tag[i][1]) {
         calculatedTAG = tag[i][2];
@@ -164,7 +164,7 @@ class App extends React.Component {
       // NOTE: user is not a dependent, determine if they have children as dependents
       if(this.state.userInputData.childSupport === "yes") {
         // NOTE: user has no dependent children
-        //console.log("user is NOT dependent, but HAS dependent(s)");
+        console.log("user is NOT dependent, but HAS dependent(s)");
         for(let i=0; i<this.state.efc.efcNotDependentButHasDependent.length; i++) {
           for(let j=0; j<this.state.efc.efcNotDependentButHasDependent[i].length; j++) {
             if(this.state.efc.efcNotDependentButHasDependent[i][j].numberInCollege === this.state.userInputData.familyInCollege) {
@@ -230,24 +230,94 @@ class App extends React.Component {
     return calculatedPOAValues;
   }
 
-  calculateNeedsBasedEFC = (efc) => {
+  calculateNeedsBasedEFC = (efc, gpa) => {
+    /* NOTE: Steps
+    * - Determine Freshman (direct out of HS) or Transfer
+    * - Determine state of current residence (NJ or non-NJ)
+    * - the combination of the two will determine the table we look at
+    *   - Freshman and NJ:      freshmanNeedsBasedEFCNJResident
+    *   - Freshman and NON-NJ:  freshmanNeedsBasedEFCNonNJResident
+    *   - Transfer and NJ:      transferNeedsBasedEFCNJResident
+    *   - Transfer and NON-NJ:  transferNeedsBasedEFCNonNJResident
+    */
+
     let calculatedNeedsEFC; // NOTE: our final needs EFC calculation result
+
+    let table; // NOTE: the table we are pulling data from
+
     // NOTE: determine our residency status from user input
     let residencyStatus = (this.state.userInputData.state === "New Jersey") ? "resident" : "non-resident";
-    
-    // NOTE based on residency status, determine the table we use
-    let table = (residencyStatus === "resident")? this.state.efc.needsBasedEFC.needsBasedEFCNJResident : this.state.efc.needsBasedEFC.needsBasedEFCNonNJResident;
 
-    // NOTE: cycle through table until we find the row we need
-    for(let i=0; i<table.length; i++) {
-      if((efc >= table[i][0]) && efc <= table[i][1]) {
-        calculatedNeedsEFC = table[i][2];
-        break;
+    let hsOrTransfer = (this.state.userInputData.studentStatus === "highschool")? "freshman" : "transfer";
+
+    // NOTE: combine residency status and transfer status to determine the correct table
+
+    if(residencyStatus === "New Jersey") {
+      if(hsOrTransfer === "freshman") {
+        // NOTE: user is Freshman/NJ Resident
+        table = this.state.efc.needsBasedEFC.freshmanNeedsBasedEFCNJResident;
+      } else {
+        // NOTE: user is Transfer/NJ Resident
+        table = this.state.efc.needsBasedEFC.transferNeedsBasedEFCNJResident;
+      }
+    } else {
+      if(hsOrTransfer === "freshman") {
+        // NOTE: user is Freshman/NON-NJ Resident
+        table = this.state.efc.needsBasedEFC.freshmanNeedsBasedEFCNonNJResident;
+      } else {
+        // NOTE: user is Transfer/NON-NJ Resident
+        table = this.state.efc.needsBasedEFC.transferNeedsBasedEFCNonNJResident;
+      }
+    }
+    console.log(table);
+    /* NOTE: we have our data table, now look up the value we need
+     *
+     * Whether the student is Freshman or Transfer determines the way we 
+     * find the correct row:
+     * 
+     * - Freshman: [{EFC lower-bound}, {EFC upper-bound}, {merit amount}]
+     * - Transfer: [{EFC lower-bound}, {EFC upper-bound}, 
+     *              {merit amount if GPA less than 3.0}, {merit amount if GPA 3.
+     *               0-3.49}, {merit amount if GPA >= 3.5}]
+     */
+
+    if(hsOrTransfer === "freshman") {
+      // NOTE: user is Freshman, determine by what range their EFC amount falls in
+      for(let r=0; r<table.length; r++) {
+        if((efc > table[r][0]) && (efc <= table[r][1])) {
+          calculatedNeedsEFC = table[r][2];
+          console.log(calculatedNeedsEFC);
+          break;
+        } 
+      }
+    } else {
+      // NOTE: user is Transfer, determine by EFC range AND GPA
+      for(let r=0; r<table.length; r++) {
+        if((efc > table[r][0]) && (efc <= table[r][1])) {
+          // NOTE: found the row, now get amount based on GPA
+          console.log(table[r]);
+          console.log(gpa);
+          if(gpa < 3) {
+            calculatedNeedsEFC = table[r][2];
+            console.log(calculatedNeedsEFC);
+            break;
+          }
+          if((gpa >= 3) && (gpa <= 3.49)) {
+            calculatedNeedsEFC = table[r][3];
+            console.log(calculatedNeedsEFC);
+            break;
+          }
+          if(gpa >= 3.5) {
+            calculatedNeedsEFC = table[r][4];
+            console.log(calculatedNeedsEFC);
+            break;
+          }
+        }
       }
     }
 
     // NOTE: return our value
-    //console.log(`Calculated Needs EFC: ${calculatedNeedsEFC}`);
+    console.log(`Calculated Needs EFC: ${calculatedNeedsEFC}`);
     return calculatedNeedsEFC;
   }
 
