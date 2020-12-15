@@ -74,8 +74,8 @@ class App extends React.Component {
 
   determineDependency = () => {
     let dependent = false;
-    // NOTE: check if user's age < 24 
-    if(this.state.userInputData.age < 24) {
+    // NOTE: check if user's age <= 24 
+    if(this.state.userInputData.age <= 24) {
       dependent = true;
     }
     // NOTE: check if user is married
@@ -86,6 +86,7 @@ class App extends React.Component {
     if(this.state.userInputData.childSupport === "yes") {
       dependent = false;
     }
+    //console.log(dependent);
     return dependent;
   }
 
@@ -145,7 +146,7 @@ class App extends React.Component {
   getEFC = () => {
     let efc = 0;
     
-    console.log(`Number In Family: ${this.state.userInputData.familyMembers}`);
+    //console.log(`Number In Family: ${this.state.userInputData.familyMembers}`);
     // NOTE get dependency status of user
     if(this.determineDependency() === true) {
       // NOTE: user is a dependent
@@ -164,7 +165,7 @@ class App extends React.Component {
       // NOTE: user is not a dependent, determine if they have children as dependents
       if(this.state.userInputData.childSupport === "yes") {
         // NOTE: user has no dependent children
-        console.log("user is NOT dependent, but HAS dependent(s)");
+        //console.log("user is NOT dependent, but HAS dependent(s)");
         for(let i=0; i<this.state.efc.efcNotDependentButHasDependent.length; i++) {
           for(let j=0; j<this.state.efc.efcNotDependentButHasDependent[i].length; j++) {
             if(this.state.efc.efcNotDependentButHasDependent[i][j].numberInCollege === this.state.userInputData.familyInCollege) {
@@ -177,7 +178,7 @@ class App extends React.Component {
           } 
         } 
       } else {
-        console.log("user is NOT dependent, and HAS NO dependents");
+        //console.log("user is NOT dependent, and HAS NO dependents");
         // NOTE: user is not a dependent and has no dependent children
         for(let i=0; i<this.state.efc.efcNotDependentAndNoDependent.length; i++) {
           for(let j=0; j<this.state.efc.efcNotDependentAndNoDependent[i].length; j++) {
@@ -188,6 +189,10 @@ class App extends React.Component {
                 break; // NOTE: break out of the loop, we found the figure we need
               }
             }
+          }
+          // NOTE: the supplied data only goes up to 2 in family/2 in college for "Not Dependent/No Dependents", so we treat "2 and 2" as "2 (or more) in family - 2 (or more) in college"
+          if((this.state.userInputData.familyInCollege > 2) || (this.state.userInputData.familyMembers > 2)) {
+            efc = this.state.efc.efcNotDependentAndNoDependent[i][2].incomeRanges[this.state.userInputData.householdIncome];
           }
         }
       }
@@ -247,29 +252,36 @@ class App extends React.Component {
 
     // NOTE: determine our residency status from user input
     let residencyStatus = (this.state.userInputData.state === "New Jersey") ? "resident" : "non-resident";
+    //console.log(`Residency Status: ${residencyStatus}`)
 
     let hsOrTransfer = (this.state.userInputData.studentStatus === "highschool")? "freshman" : "transfer";
+    //console.log(`HSorTransfer: ${hsOrTransfer}`);
+
 
     // NOTE: combine residency status and transfer status to determine the correct table
 
-    if(residencyStatus === "New Jersey") {
+    if(residencyStatus === "resident") {
       if(hsOrTransfer === "freshman") {
         // NOTE: user is Freshman/NJ Resident
         table = this.state.efc.needsBasedEFC.freshmanNeedsBasedEFCNJResident;
+        //console.log("freshmanNeedsBasedEFCNJResident");
       } else {
         // NOTE: user is Transfer/NJ Resident
         table = this.state.efc.needsBasedEFC.transferNeedsBasedEFCNJResident;
+        //console.log("transferNeedsBasedEFCNJResident");
       }
     } else {
       if(hsOrTransfer === "freshman") {
         // NOTE: user is Freshman/NON-NJ Resident
         table = this.state.efc.needsBasedEFC.freshmanNeedsBasedEFCNonNJResident;
+        //console.log("freshmanNeedsBasedEFCNonNJResident");
       } else {
         // NOTE: user is Transfer/NON-NJ Resident
         table = this.state.efc.needsBasedEFC.transferNeedsBasedEFCNonNJResident;
+        //console.log("transferNeedsBasedEFCNonNJResident");
       }
     }
-    console.log(table);
+    //console.log(table);
     /* NOTE: we have our data table, now look up the value we need
      *
      * Whether the student is Freshman or Transfer determines the way we 
@@ -280,36 +292,36 @@ class App extends React.Component {
      *              {merit amount if GPA less than 3.0}, {merit amount if GPA 3.
      *               0-3.49}, {merit amount if GPA >= 3.5}]
      */
-
+    
     if(hsOrTransfer === "freshman") {
       // NOTE: user is Freshman, determine by what range their EFC amount falls in
+      console.log("freshman");
       for(let r=0; r<table.length; r++) {
-        if((efc > table[r][0]) && (efc <= table[r][1])) {
+        if((efc >= table[r][0]) && (efc <= table[r][1])) {
           calculatedNeedsEFC = table[r][2];
-          console.log(calculatedNeedsEFC);
+          //console.log(calculatedNeedsEFC);
           break;
         } 
       }
     } else {
       // NOTE: user is Transfer, determine by EFC range AND GPA
+      console.log("transfer student");
       for(let r=0; r<table.length; r++) {
-        if((efc > table[r][0]) && (efc <= table[r][1])) {
+        if((efc >= table[r][0]) && (efc <= table[r][1])) {
           // NOTE: found the row, now get amount based on GPA
-          console.log(table[r]);
-          console.log(gpa);
           if(gpa < 3) {
             calculatedNeedsEFC = table[r][2];
-            console.log(calculatedNeedsEFC);
+            //console.log(calculatedNeedsEFC);
             break;
           }
           if((gpa >= 3) && (gpa <= 3.49)) {
             calculatedNeedsEFC = table[r][3];
-            console.log(calculatedNeedsEFC);
+            //console.log(calculatedNeedsEFC);
             break;
           }
           if(gpa >= 3.5) {
             calculatedNeedsEFC = table[r][4];
-            console.log(calculatedNeedsEFC);
+            //console.log(calculatedNeedsEFC);
             break;
           }
         }
@@ -317,7 +329,7 @@ class App extends React.Component {
     }
 
     // NOTE: return our value
-    console.log(`Calculated Needs EFC: ${calculatedNeedsEFC}`);
+    //console.log(`Calculated Needs EFC: ${calculatedNeedsEFC}`);
     return calculatedNeedsEFC;
   }
 
@@ -328,7 +340,7 @@ class App extends React.Component {
   
     // NOTE: first determine if user is freshman/current HS student or tansfer
     if(this.state.userInputData.studentStatus === "highschool") {
-      console.log("High School");
+      //console.log("High School");
       // NOTE: user is current HS/incoming freshman, now determine if we are going by SAT or ACT
       //console.log(Object.keys(this.state.userInputData.scores));
       let useTestScores = (Object.keys(this.state.userInputData.scores).length)? true : false;
@@ -337,14 +349,14 @@ class App extends React.Component {
         //NOTE: We are using SAT/ACT test scores to calculate
         
         let meritTestMode = (this.state.userInputData.scores.act) ? "act" : "sat";
-        console.log(meritTestMode);
+        //console.log(meritTestMode);
     
         let satScore = 0, actScore = 0;
         
         // NOTE: get whichever score we need. 
         if(meritTestMode === "sat") {
           satScore = this.state.userInputData.scores.erwsat + this.state.userInputData.scores.mathsat;
-          console.log(satScore);
+          //console.log(satScore);
           meritData = this.state.merit.meritsat;  
         } else {
           // NOTE: use ACT instead of SAT
@@ -388,8 +400,8 @@ class App extends React.Component {
       }
     } else {
         // NOTE: user is transfer student, go by GPA
-        console.log("Transfer");
-        console.log(`GPA: ${GPA}`);
+        //console.log("Transfer");
+        //console.log(`GPA: ${GPA}`);
         meritData = this.state.merit.merittransfer;
         for(let i=0; i<meritData.length; i++) {
           if((GPA >= meritData[i][0]) && (GPA <= meritData[i][1])) {

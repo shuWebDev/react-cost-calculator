@@ -20,7 +20,7 @@ class Final extends React.Component {
     return (
       <section>
         <h4>Based on the information you have provided, the following calculations represent the average net price of attendance that students similar to you paid in the given year:</h4>
-        <h5>Academic Year: 2019-2020</h5>
+        <h5>Academic Year: 2020-2021</h5>
         <hr />
         <ul>
           <li><strong>Estimated Total Direct Cost: ${this.state.report.POA.totalCost.toFixed(2)}</strong>
